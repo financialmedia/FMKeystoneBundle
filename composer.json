@@ -2,7 +2,7 @@
     "name": "fm/keystone-bundle",
     "type": "symfony-bundle",
     "description": "A Symfony2 implementation of the OpenStack Identity Service API A.K.A. Keystone",
-    "keywords": ["open", "stack", "open stack", "keystone", "authentication", "token"],
+    "keywords": ["openstack", "identity", "keystone", "authentication", "token"],
     "license": "MIT",
     "authors": [
         {
