@@ -12,7 +12,7 @@ class UserActivateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cdn:user:activate')
+            ->setName('keystone:user:activate')
             ->setDescription('Activate a user')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),

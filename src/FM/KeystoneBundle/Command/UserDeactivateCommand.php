@@ -12,7 +12,7 @@ class UserDeactivateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cdn:user:deactivate')
+            ->setName('keystone:user:deactivate')
             ->setDescription('Deactivate a user')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),

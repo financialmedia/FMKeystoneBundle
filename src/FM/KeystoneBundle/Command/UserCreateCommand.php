@@ -13,7 +13,7 @@ class UserCreateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cdn:user:create')
+            ->setName('keystone:user:create')
             ->setDescription('Create a user.')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),

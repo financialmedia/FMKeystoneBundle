@@ -12,7 +12,7 @@ class UserGrantCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cdn:user:grant')
+            ->setName('keystone:user:grant')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),
                 new InputArgument('role', InputArgument::REQUIRED, 'The role'),

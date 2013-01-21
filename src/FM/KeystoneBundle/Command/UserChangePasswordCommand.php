@@ -12,7 +12,7 @@ class UserChangePasswordCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cdn:user:change-password')
+            ->setName('keystone:user:change-password')
             ->setDescription('Change the password of a user.')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),
