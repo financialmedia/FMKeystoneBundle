@@ -98,6 +98,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
      * Validates the JSON
      *
      * @todo improve this! Maybe using a symfony validator, or maybe https://github.com/justinrainbow/json-schema
+     * @todo authenticating using token is temporary disabled!
      *
      * @param array $data
      * @return boolean
@@ -126,6 +127,9 @@ class HttpPostAuthenticationListener implements ListenerInterface
             }
         }
         else {
+            // TODO TEMPORARY DISABLED!
+            return false;
+
             if (!isset($data['auth']['token']) || !is_array($data['auth']['token'])) {
                 return false;
             }
