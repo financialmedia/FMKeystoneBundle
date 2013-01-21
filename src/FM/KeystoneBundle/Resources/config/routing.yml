@@ -1,0 +1,5 @@
+get_token:
+    pattern: /tokens
+    defaults: { _controller: FMKeystoneBundle:Token:tokens }
+    requirements:
+        _method: POST

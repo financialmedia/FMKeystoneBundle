@@ -1,0 +1,12 @@
+services:
+  fm_keystone.user_manager:
+    class: FM\KeystoneBundle\Entity\UserManager
+    arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, "FM\CdnBundle\Entity\User"]
+
+  fm_keystone.user_manipulator:
+    class: FM\KeystoneBundle\Util\UserManipulator
+    arguments: [@fm_keystone.user_manager]
+
+  fm_keystone.token_manager:
+    class: FM\KeystoneBundle\Entity\TokenManager
+    arguments: [@fm_keystone.security.encoder.token, @doctrine.orm.entity_manager, "FM\CdnBundle\Entity\Token"]

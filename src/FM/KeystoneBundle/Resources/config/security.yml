@@ -1,0 +1,51 @@
+services:
+    fm_keystone.security.user_provider:
+        alias: fm_keystone.user_manager
+        public: false
+
+    fm_keystone.security.authentication.listener.httppost:
+        class: FM\KeystoneBundle\Security\Firewall\HttpPostAuthenticationListener
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - null # provider-shared key
+            - @logger
+        tags:
+            - { name: monolog.logger, channel: security }
+
+    fm_keystone.security.authentication.listener.tokenheader:
+        class: FM\KeystoneBundle\Security\Firewall\TokenHeaderAuthenticationListener
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - null # provider-shared key
+            - @logger
+        tags: [{ name: monolog.logger channel: security }]
+
+    fm_keystone.security.authentication.provider.user:
+        class: FM\KeystoneBundle\Security\Authentication\Provider\UserAuthenticationProvider
+        arguments:
+            - @fm_keystone.security.user_provider
+            - @security.user_checker
+            - null # provider-shared key
+            - @security.encoder_factory
+
+    fm_keystone.security.authentication.provider.token:
+        class: FM\KeystoneBundle\Security\Authentication\Provider\TokenAuthenticationProvider
+        arguments:
+            - @fm_keystone.token_manager
+            - @fm_keystone.security.user_provider
+            - @security.user_checker
+            - null # provider-shared key
+
+    fm_keystone.security.authentication.provider.combined:
+        class: FM\KeystoneBundle\Security\Authentication\Provider\CombinedAuthenticationProvider
+        arguments:
+            - @service_container
+
+    fm_keystone.security.factory.user:
+        class: FM\KeystoneBundle\Security\Factory\PostLoginFactory
+
+    fm_keystone.security.encoder.token:
+        class: FM\KeystoneBundle\Security\Encoder\TokenEncoder
+        arguments: [null] # secret (injected via compiler pass)
