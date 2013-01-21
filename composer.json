@@ -1,0 +1,23 @@
+{
+    "name": "fm/keystone-bundle",
+    "type": "symfony-bundle",
+    "description": "A Symfony2 implementation of the OpenStack Identity Service API A.K.A. Keystone",
+    "keywords": ["open", "stack", "open stack", "keystone", "authentication", "token"],
+    "authors": [
+        {
+            "name": "fieg",
+            "email": "jeroen@financial-media.nl"
+        },
+        {
+            "name": "pkruithof",
+            "email": "peter@financial-media.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": { "FM": "src/" }
+    }
+}

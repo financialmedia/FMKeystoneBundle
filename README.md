@@ -9,6 +9,8 @@ More information about the protocol can be found here: http://docs.openstack.org
 
 Notice: This bundle is a work in progress and does not cover the _complete_ OpenStack Indentity Service API spec.
 
+Attention: Use at your own risk!
+
 ## Acknowledgements
 
 A lot of components are heavily inspired by [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle).
