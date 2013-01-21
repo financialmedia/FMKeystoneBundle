@@ -3,19 +3,19 @@ FMKeystoneBundle
 
 A Symfony2 implementation of the [OpenStack Identity Service API](http://docs.openstack.org/api/openstack-identity-service/2.0/).
 
-You can use this bundle to add a token-baed authentication mechanism for an REST API. The token is send using a HTTP header.
+You can use this bundle to add a token-baed authentication mechanism for a REST API. The token is send using a HTTP header.
 
 More information about the protocol can be found here: http://docs.openstack.org/api/openstack-identity-service/2.0/
 
-Notice: This bundle is a work in progress and does not cover the _complete_ OpenStack Indentity Service API spec.
+**Notice**: This bundle is a work in progress and does not cover the _complete_ OpenStack Indentity Service API spec.
 
-Attention: Use at your own risk!
+**Attention**: Use at your own risk!
 
 ## Acknowledgements
 
 A lot of components are heavily inspired by [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle).
 
-## License
+## MIT License
 
 Copyright (C) 2013 Financial Media BV
 
