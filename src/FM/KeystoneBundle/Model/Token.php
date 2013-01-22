@@ -7,10 +7,12 @@
 
 namespace FM\KeystoneBundle\Model;
 
+use FM\KeystoneBundle\Model\TokenInterface;
+
 /**
  * @see ../Resources/config/doctrine/Token.orm.xml for mapping information
  */
-class Token
+class Token implements TokenInterface
 {
     protected $id;
 

@@ -21,15 +21,18 @@ abstract class AbstractControllerTest extends WebTestCase
 
             $this->password = uniqid();
 
-            $manager = static::$kernel->getContainer()->get('fm_keystone.user_manager');
+            $userProviderServiceId = static::$kernel->getContainer()->getParameter('fm_keystone.security.user_provider.id');
+
+            $provider = static::$kernel->getContainer()->get($userProviderServiceId);
             $manipulator = static::$kernel->getContainer()->get('fm_keystone.user_manipulator');
 
-            if (null === $user = $manager->findUserByUsername('test')) {
+            if (null === $user = $provider->loadUserByUsername('test')) {
                 $user = $manipulator->create('test', $this->password, 'test@example.org', true);
             }
 
-            $manipulator->addRole('test', 'ROLE_USER');
-            $manipulator->changePassword('test', $this->password);
+            $user->addRole('ROLE_USER');
+            $user->setPlainPassword($this->password);
+            $provider->updateUser($user);
 
             $this->user = $user;
         }

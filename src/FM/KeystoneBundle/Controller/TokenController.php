@@ -2,14 +2,13 @@
 
 namespace FM\KeystoneBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FM\KeystoneBundle\Model\TokenInterface;
 
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
-use FM\KeystoneBundle\Entity\Token;
-use FM\KeystoneBundle\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TokenController extends Controller
 {
@@ -55,7 +54,7 @@ class TokenController extends Controller
         return $this->get('fm_keystone.token_manager');
     }
 
-    protected function getTokenData(Token $token)
+    protected function getTokenData(TokenInterface $token)
     {
         return array(
             'expires' => gmdate('Y-m-d\TH:i:s\Z', $token->getExpiresAt()->getTimestamp()),
@@ -63,7 +62,7 @@ class TokenController extends Controller
         );
     }
 
-    protected function getServiceCatalogs(Token $token)
+    protected function getServiceCatalogs(TokenInterface $token)
     {
         return array(
             array(
@@ -74,7 +73,7 @@ class TokenController extends Controller
         );
     }
 
-    protected function getEndpoints(Token $token)
+    protected function getEndpoints(TokenInterface $token)
     {
         return array(
             array(
@@ -84,7 +83,7 @@ class TokenController extends Controller
         );
     }
 
-    protected function getUserData(User $user)
+    protected function getUserData(UserInterface $user)
     {
         return array(
             'id' => $user->getId(),
