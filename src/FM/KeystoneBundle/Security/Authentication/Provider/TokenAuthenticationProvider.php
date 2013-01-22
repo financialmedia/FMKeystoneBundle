@@ -145,6 +145,7 @@ class TokenAuthenticationProvider implements AuthenticationProviderInterface
         }
 
         list($class, $username, $expires, $hash) = $parts;
+
         if (false === $username = base64_decode($username, true)) {
             throw new AuthenticationException('$username contains a character from outside the base64 alphabet.');
         }

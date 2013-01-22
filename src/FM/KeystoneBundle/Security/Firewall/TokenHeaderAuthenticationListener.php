@@ -53,7 +53,7 @@ class TokenHeaderAuthenticationListener implements ListenerInterface
             $this->securityContext->setToken(null);
 
             if (null !== $this->logger) {
-                $this->logger->info(sprintf('Authentication request failed for user "%s" using POST and passwordCredentials: %s', $authToken, $failed->getMessage()));
+                $this->logger->info(sprintf('Authentication request failed for user "%s" using X-Auth-Token header: %s', $authToken, $failed->getMessage()));
             }
 
             // Deny authentication with a '401 Unauthorized' HTTP response

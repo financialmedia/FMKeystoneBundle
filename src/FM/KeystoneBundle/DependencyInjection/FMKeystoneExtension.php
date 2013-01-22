@@ -28,8 +28,9 @@ class FMKeystoneExtension extends Extension
 
         $this->remapParametersNamespaces($config, $container, array(
             '' => array(
-                'user_class'  => 'fm_keystone.model.user.class',
-                'token_class' => 'fm_keystone.model.token.class',
+                'user_class'            => 'fm_keystone.model.user.class',
+                'token_class'           => 'fm_keystone.model.token.class',
+                'user_provider_service' => 'fm_keystone.security.user_provider.service',
             ),
         ));
     }

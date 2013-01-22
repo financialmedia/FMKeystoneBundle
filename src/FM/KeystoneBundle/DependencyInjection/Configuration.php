@@ -24,6 +24,13 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('token_class')->isRequired()->cannotBeEmpty()->end()
+
+                /**
+                 * Use this if your User class doesn't have an username field, but for example an email field.
+                 * You can create a class thats implements UserProviderInterface and configure it here.
+                 * Defaults to the default UserProvider provided by this bundle.
+                 */
+                ->scalarNode('user_provider_service')->defaultValue('fm_keystone.security.user_provider')->cannotBeEmpty()->end()
             ->end()
         ;
 
