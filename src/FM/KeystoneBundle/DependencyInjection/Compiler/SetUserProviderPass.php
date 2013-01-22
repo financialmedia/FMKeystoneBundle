@@ -22,17 +22,19 @@ class SetUserProviderPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        $userProviderServiceId = $container->getParameter('fm_keystone.security.user_provider.id');
+
         if ($container->hasDefinition('fm_keystone.security.authentication.provider.token')) {
             $definition = $container->getDefinition('fm_keystone.security.authentication.provider.token');
             $definition
-                ->replaceArgument(1, new Reference($container->getParameter('fm_keystone.security.user_provider.service')))
+                ->replaceArgument(1, new Reference($userProviderServiceId))
             ;
         }
 
         if ($container->hasDefinition('fm_keystone.security.authentication.provider.user')) {
             $definition = $container->getDefinition('fm_keystone.security.authentication.provider.user');
             $definition
-                ->replaceArgument(0, new Reference($container->getParameter('fm_keystone.security.user_provider.service')))
+                ->replaceArgument(0, new Reference($userProviderServiceId))
             ;
         }
     }
