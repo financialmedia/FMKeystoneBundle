@@ -109,4 +109,28 @@ class UserManipulator
 
         return true;
     }
+
+    /**
+     * Adds role to the given user.
+     *
+     * @param string $username
+     * @param string $role
+     *
+     * @return Boolean true if role was added, false if user already had the role
+     */
+    public function removeRole($username, $role)
+    {
+        if (!$user = $this->userManager->findUserByUsername($username)) {
+            throw new \InvalidArgumentException(sprintf('User identified by "%s" username does not exist.', $username));
+        }
+
+        if (!$user->hasRole($role)) {
+            return false;
+        }
+
+        $user->removeRole($role);
+        $this->userManager->updateUser($user);
+
+        return true;
+    }
 }

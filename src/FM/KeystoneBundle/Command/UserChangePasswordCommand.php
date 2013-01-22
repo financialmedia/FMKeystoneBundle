@@ -2,12 +2,11 @@
 
 namespace FM\KeystoneBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UserChangePasswordCommand extends ContainerAwareCommand
+class UserChangePasswordCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -41,8 +40,9 @@ EOT
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
 
-        $manipulator = $this->getContainer()->get('fm_cdn.security.user_manipulator');
-        $manipulator->changePassword($username, $password);
+        $user = $this->loadUserByUsername($username);
+        $user->setPlainPassword($password);
+        $this->getUserProvider()->updateUser($user);
 
         $output->writeln(sprintf('Changed password for user <comment>%s</comment>', $username));
     }

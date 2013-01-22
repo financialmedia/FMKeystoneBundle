@@ -2,12 +2,11 @@
 
 namespace FM\KeystoneBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UserGrantCommand extends ContainerAwareCommand
+class UserGrantCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -31,8 +30,11 @@ class UserGrantCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException(sprintf('<error>Role "%s" is not a valid role, must be one of "%s"</error>', $role, implode(', ', $this->getValidRoles())));
         }
 
-        $manipulator = $this->getContainer()->get('fm_cdn.security.user_manipulator');
-        $manipulator->addRole($username, $role);
+        $userProviderServiceId = $this->getContainer()->getParameter('fm_keystone.security.user_provider.id');
+
+        $user = $this->loadUserByUsername($username);
+        $user->addRole($role);
+        $this->getUserProvider()->updateUser($user);
 
         $output->writeln(sprintf('User <info>%s</info> has been granted role <info>%s</info>', $username, $role));
     }

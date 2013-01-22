@@ -181,10 +181,23 @@ class UserManager implements UserProviderInterface
     public function updatePassword(UserInterface $user)
     {
         if (0 !== strlen($password = $user->getPlainPassword())) {
-            $encoder = $this->getEncoder($user);
-            $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+            $user->setPassword($this->encodePassword($password, $user));
             $user->eraseCredentials();
         }
+    }
+
+    public function generateSalt()
+    {
+        return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
+
+    public function encodePassword($password, UserInterface $user)
+    {
+        if ($user->getSalt() == '') {
+            $user->setSalt($this->generateSalt());
+        }
+
+        return $this->encoderFactory->getEncoder($user)->encodePassword($password, $user->getSalt());
     }
 
     /**

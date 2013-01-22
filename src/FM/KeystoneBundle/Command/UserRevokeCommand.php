@@ -2,12 +2,11 @@
 
 namespace FM\KeystoneBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UserRevokeCommand extends ContainerAwareCommand
+class UserRevokeCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -27,8 +26,9 @@ class UserRevokeCommand extends ContainerAwareCommand
         $username = $input->getArgument('username');
         $role = $input->getArgument('role');
 
-        $manipulator = $this->getContainer()->get('fm_cdn.security.user_manipulator');
-        $manipulator->removeRole($username, $role);
+        $user = $this->loadUserByUsername($username);
+        $user->removeRole($role);
+        $this->getUserProvider()->updateUser($user);
 
         $output->writeln(sprintf('User <info>%s</info> has been revoked role <info></info>', $username, $role));
     }

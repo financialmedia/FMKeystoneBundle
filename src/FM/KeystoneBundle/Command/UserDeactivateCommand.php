@@ -2,12 +2,11 @@
 
 namespace FM\KeystoneBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UserDeactivateCommand extends ContainerAwareCommand
+class UserDeactivateCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -29,8 +28,9 @@ EOT
     {
         $username = $input->getArgument('username');
 
-        $manipulator = $this->getContainer()->get('fm_cdn.security.user_manipulator');
-        $manipulator->deactivate($username);
+        $user = $this->loadUserByUsername($username);
+        $user->setEnabled(false);
+        $this->getUserProvider()->updateUser($user);
 
         $output->writeln(sprintf('User "%s" has been deactivated.', $username));
     }

@@ -2,13 +2,12 @@
 
 namespace FM\KeystoneBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UserCreateCommand extends ContainerAwareCommand
+class UserCreateCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -50,7 +49,7 @@ EOT
         $password   = $input->getArgument('password');
         $inactive   = $input->getOption('inactive');
 
-        $manipulator = $this->getContainer()->get('fm_cdn.security.user_manipulator');
+        $manipulator = $this->getContainer()->get('fm_keystone.user_manipulator');
         $manipulator->create($username, $password, $email, !$inactive);
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
