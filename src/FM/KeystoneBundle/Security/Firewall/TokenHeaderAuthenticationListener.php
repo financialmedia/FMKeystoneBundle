@@ -2,16 +2,15 @@
 
 namespace FM\KeystoneBundle\Security\Firewall;
 
-use Symfony\Component\HttpFoundation\Response;
-
-use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
-
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+
+use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
 
 class TokenHeaderAuthenticationListener implements ListenerInterface
 {
@@ -56,10 +55,7 @@ class TokenHeaderAuthenticationListener implements ListenerInterface
                 $this->logger->info(sprintf('Authentication request failed for user "%s" using X-Auth-Token header: %s', $authToken, $failed->getMessage()));
             }
 
-            // Deny authentication with a '401 Unauthorized' HTTP response
-            $response = new Response();
-            $response->setStatusCode(401);
-            $event->setResponse($response);
+            throw new AccessDeniedHttpException('Unauthorized', $failed);
         }
     }
 }
