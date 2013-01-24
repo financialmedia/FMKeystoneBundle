@@ -17,15 +17,15 @@ use FM\KeystoneBundle\Model\Token as AbstractToken;
  *     use Doctrine\ORM\Mapping as ORM;
  *
  *     /**
- *      * @ORM\Entity
- *      * @ORM\Table(name="keystone_token")
+ *      * (@)ORM\Entity
+ *      * (@)ORM\Table(name="keystone_token")
  *      * /
  *     class Token extends BaseToken
  *     {
  *         /**
- *          * @ORM\Id
- *          * @ORM\Column(type="string")
- *          * @ORM\GeneratedValue(strategy="UUID")
+ *          * (@)ORM\Id
+ *          * (@)ORM\Column(type="string")
+ *          * (@)ORM\GeneratedValue(strategy="UUID")
  *          * /
  *         protected $id;
  *

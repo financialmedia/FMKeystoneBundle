@@ -17,15 +17,15 @@ use FM\KeystoneBundle\Model\User as AbstractUser;
  *     use Doctrine\ORM\Mapping as ORM;
  *
  *     /**
- *      * @ORM\Entity
- *      * @ORM\Table(name="keystone_user")
+ *      * (@)ORM\Entity
+ *      * (@)ORM\Table(name="keystone_user")
  *      * /
  *     class User extends BaseUser
  *     {
  *         /**
- *          * @ORM\Id
- *          * @ORM\Column(type="integer")
- *          * @ORM\GeneratedValue(strategy="AUTO")
+ *          * (@)ORM\Id
+ *          * (@)ORM\Column(type="integer")
+ *          * (@)ORM\GeneratedValue(strategy="AUTO")
  *          * /
  *         protected $id;
  *
