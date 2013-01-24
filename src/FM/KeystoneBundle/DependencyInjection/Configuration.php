@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
                  * You can create a class thats implements UserProviderInterface and configure it here.
                  * Defaults to the default UserProvider provided by this bundle.
                  */
-                ->scalarNode('user_provider_id')->defaultValue('fm_keystone.security.user_provider')->cannotBeEmpty()->end()
+                ->scalarNode('user_provider_id')->defaultValue('fm_keystone.user_manager')->cannotBeEmpty()->end()
             ->end()
         ;
 
