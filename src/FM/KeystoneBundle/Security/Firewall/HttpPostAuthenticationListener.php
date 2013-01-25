@@ -2,6 +2,8 @@
 
 namespace FM\KeystoneBundle\Security\Firewall;
 
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -45,6 +47,8 @@ class HttpPostAuthenticationListener implements ListenerInterface
         $request = $event->getRequest();
 
         if ($request->getMethod() !== 'POST') {
+            throw new MethodNotAllowedHttpException(array('POST'));
+
             return;
         }
 
@@ -52,6 +56,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
 
         if (false === $this->validateJson($data)) {
             throw new AuthenticationServiceException('Invalid JSON!');
+
             return;
         }
 
@@ -65,8 +70,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
             if (null !== $this->logger) {
                 $this->logger->info(sprintf('Post Authentication body found using passwordCredentials for user "%s"', $username));
             }
-        }
-        else {
+        } else {
             // validate using token
             $token = $data['auth']['token']['id'];
 
@@ -97,7 +101,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
      * @todo improve this! Maybe using a symfony validator, or maybe https://github.com/justinrainbow/json-schema
      * @todo authenticating using token is temporary disabled!
      *
-     * @param array $data
+     * @param  array   $data
      * @return boolean
      */
     protected function validateJson($data)
@@ -122,8 +126,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
             if (!isset($data['auth']['passwordCredentials']['password'])) {
                 return false;
             }
-        }
-        else {
+        } else {
             // TODO TEMPORARY DISABLED!
             return false;
 

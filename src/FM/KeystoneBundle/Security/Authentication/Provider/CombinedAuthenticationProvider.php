@@ -8,15 +8,8 @@
 namespace FM\KeystoneBundle\Security\Authentication\Provider;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
-use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
-use FM\KeystoneBundle\Authentication\Token\UsernamePasswordToken;
 
 class CombinedAuthenticationProvider implements AuthenticationProviderInterface
 {

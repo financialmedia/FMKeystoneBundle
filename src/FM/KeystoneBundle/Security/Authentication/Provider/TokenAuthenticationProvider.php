@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use FM\KeystoneBundle\Entity\Token;
 use FM\KeystoneBundle\Entity\TokenManager;
 use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
-use FM\KeystoneBundle\Authentication\Token\UsernamePasswordToken;
 
 class TokenAuthenticationProvider implements AuthenticationProviderInterface
 {

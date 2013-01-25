@@ -4,8 +4,6 @@ namespace FM\KeystoneBundle\Controller;
 
 use FM\KeystoneBundle\Model\TokenInterface;
 
-use JMS\SecurityExtraBundle\Annotation\Secure;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,9 +16,8 @@ class TokenController extends Controller
 
         $token = null;
 
-
         if (!$security->getToken() || !(($user = $security->getToken()->getUser()) && $security->isGranted('ROLE_USER'))) {
-        	return new Response('Unauthorized', 401);
+            return new Response('Unauthorized', 401);
         }
 
         $manager = $this->getTokenManager();

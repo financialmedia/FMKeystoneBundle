@@ -39,7 +39,7 @@ class Token implements TokenInterface
     /**
      * Set hash
      *
-     * @param string $hash
+     * @param  string $hash
      * @return Token
      */
     public function setHash($hash)
@@ -62,7 +62,7 @@ class Token implements TokenInterface
     /**
      * Set expiresAt
      *
-     * @param \DateTime $expiresAt
+     * @param  \DateTime $expiresAt
      * @return Token
      */
     public function setExpiresAt($expiresAt)

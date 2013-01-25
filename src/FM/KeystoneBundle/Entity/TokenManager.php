@@ -69,7 +69,7 @@ class TokenManager
     /**
      * Finds a token by token
      *
-     * @param string $token
+     * @param  string $token
      * @return Token
      */
     public function findTokenByToken($token)
@@ -80,8 +80,8 @@ class TokenManager
     /**
      * Updates a Token.
      *
-     * @param Token    $token
-     * @param Boolean  $andFlush Whether to flush the changes (default true)
+     * @param Token   $token
+     * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     public function updateToken(Token $token, $andFlush = true)
     {
