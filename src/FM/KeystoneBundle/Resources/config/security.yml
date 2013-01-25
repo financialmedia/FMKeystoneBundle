@@ -43,9 +43,6 @@ services:
         arguments:
             - @service_container
 
-    fm_keystone.security.factory.user:
-        class: FM\KeystoneBundle\Security\Factory\PostLoginFactory
-
     fm_keystone.security.encoder.token:
         class: FM\KeystoneBundle\Security\Encoder\TokenEncoder
         arguments: [null] # secret (injected via compiler pass)
