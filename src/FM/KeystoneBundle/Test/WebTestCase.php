@@ -9,7 +9,7 @@ namespace FM\KeystoneBundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
-class WebTestCase extends BaseWebTestCase
+abstract class WebTestCase extends BaseWebTestCase
 {
     protected $userProvider;
     protected $user;
