@@ -44,7 +44,7 @@ class TokenController extends Controller
     }
 
     /**
-     * @return FM\KeystoneBundle\Entity\TokenManager
+     * @return FM\KeystoneBundle\Manager\TokenManager
      */
     protected function getTokenManager()
     {

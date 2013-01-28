@@ -5,12 +5,11 @@
  * @copyright Financial Media BV <http://financial-media.nl>
  */
 
-namespace FM\KeystoneBundle\Entity;
-
-use FM\KeystoneBundle\Model\Token;
+namespace FM\KeystoneBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+use FM\KeystoneBundle\Model\Token;
 use FM\KeystoneBundle\Security\Encoder\TokenEncoder;
 
 class TokenManager

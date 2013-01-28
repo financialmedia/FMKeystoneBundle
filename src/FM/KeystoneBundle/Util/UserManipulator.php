@@ -2,7 +2,7 @@
 
 namespace FM\KeystoneBundle\Util;
 
-use FM\KeystoneBundle\Entity\UserManager;
+use FM\KeystoneBundle\Manager\UserManager;
 
 class UserManipulator
 {

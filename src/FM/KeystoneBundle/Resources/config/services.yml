@@ -1,6 +1,6 @@
 services:
   fm_keystone.user_manager:
-    class: FM\KeystoneBundle\Entity\UserManager
+    class: FM\KeystoneBundle\Manager\UserManager
     arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
 
   fm_keystone.user_manipulator:
@@ -8,7 +8,7 @@ services:
     arguments: [@fm_keystone.user_manager]
 
   fm_keystone.token_manager:
-    class: FM\KeystoneBundle\Entity\TokenManager
+    class: FM\KeystoneBundle\Manager\TokenManager
     arguments: [@fm_keystone.security.encoder.token, @doctrine.orm.entity_manager, %fm_keystone.model.token.class%]
 
   fm_keystone.kernel.listener.exception:

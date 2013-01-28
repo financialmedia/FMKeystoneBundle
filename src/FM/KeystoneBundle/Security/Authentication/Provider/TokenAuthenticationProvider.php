@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use FM\KeystoneBundle\Entity\Token;
-use FM\KeystoneBundle\Entity\TokenManager;
+use FM\KeystoneBundle\Manager\TokenManager;
 use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
 
 class TokenAuthenticationProvider implements AuthenticationProviderInterface

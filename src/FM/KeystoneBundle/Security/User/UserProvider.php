@@ -2,7 +2,7 @@
 
 namespace FM\KeystoneBundle\Security\User;
 
-use FM\KeystoneBundle\Entity\UserManager;
+use FM\KeystoneBundle\Manager\UserManager;
 
 class UserProvider extends UserManager
 {

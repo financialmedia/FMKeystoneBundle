@@ -1,24 +1,13 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace FM\KeystoneBundle\Entity;
-
-use Symfony\Component\Security\Core\User\UserInterface;
+namespace FM\KeystoneBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
@@ -132,11 +121,11 @@ class UserManager implements UserProviderInterface
      * It is strongly discouraged to use this method manually as it bypasses
      * all ACL checks.
      *
-     * @param SecurityUserInterface $user
+     * @param UserInterface $user
      *
      * @return UserInterface
      */
-    public function refreshUser(SecurityUserInterface $user)
+    public function refreshUser(UserInterface $user)
     {
         $class = $this->getClass();
         if (!$user instanceof $class) {
