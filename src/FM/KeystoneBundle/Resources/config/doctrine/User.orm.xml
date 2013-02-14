@@ -20,7 +20,7 @@
 
         <field name="expired" column="expired" type="boolean" />
 
-        <field name="roles" column="roles" type="array" />
+        <field name="roles" column="roles" type="array" nullable="true" />
 
         <field name="credentialsExpired" column="credentials_expired" type="boolean" />
 
