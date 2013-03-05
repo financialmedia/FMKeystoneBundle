@@ -74,6 +74,6 @@ abstract class WebTestCase extends BaseWebTestCase
             array('HTTP_X-Auth-Token' => $this->requestToken()->access->token->id)
         );
 
-        return $this->client->request('GET', '/api/properties/', array(), array(), $server);
+        return $this->client->request($method, $uri, $parameters, $files, $server, $content, $changeHistory);
     }
 }
