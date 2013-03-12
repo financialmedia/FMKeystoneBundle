@@ -205,6 +205,20 @@ class UserManager implements UserProviderInterface
         }
     }
 
+    /**
+     * Deletes a user.
+     *
+     * @param UserInterface $user
+     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     */
+    public function deleteUser(UserInterface $user, $andFlush = true)
+    {
+        $this->entityManager->remove($user);
+        if ($andFlush) {
+            $this->entityManager->flush();
+        }
+    }
+
     protected function getEncoder(UserInterface $user)
     {
         return $this->encoderFactory->getEncoder($user);

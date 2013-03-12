@@ -22,13 +22,14 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   pdo_mysql
+        driver:   pdo_sqlite
         host:     ~
         port:     ~
         dbname:   ~
         user:     ~
         password: ~
         logging:  %kernel.debug%
+        memory:   true
         charset:  UTF8
 
     orm:
