@@ -59,10 +59,14 @@ class UserManager implements UserProviderInterface
      *
      * @return UserInterface
      */
-    public function createUser()
+    public function createUser($username, $password, $roles = array())
     {
         $class = $this->getClass();
         $user = new $class;
+        $user->setUsername($username);
+        $user->setPlainPassword($password);
+        $user->setRoles($roles);
+        $user->setEnabled(true);
 
         return $user;
     }
@@ -200,6 +204,20 @@ class UserManager implements UserProviderInterface
         $this->updatePassword($user);
 
         $this->entityManager->persist($user);
+        if ($andFlush) {
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * Deletes a user.
+     *
+     * @param UserInterface $user
+     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     */
+    public function deleteUser(UserInterface $user, $andFlush = true)
+    {
+        $this->entityManager->remove($user);
         if ($andFlush) {
             $this->entityManager->flush();
         }
