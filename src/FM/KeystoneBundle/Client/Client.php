@@ -5,7 +5,7 @@ namespace FM\KeystoneBundle\Client;
 use Guzzle\Http\Client as GuzzleClient;
 
 /**
- * Extended Guzze HTTP client for transparent communication with a keystone
+ * Extended Guzzle HTTP client for transparent communication with a keystone
  * service.
  *
  * Basic usage:
