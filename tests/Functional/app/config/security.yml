@@ -1,0 +1,35 @@
+#jms_security_extra:
+#    secure_all_services: false
+#    expressions: true
+
+security:
+    encoders:
+        FM\KeystoneIntegrationBundle\Entity\User: sha256
+
+    role_hierarchy:
+        ROLE_API_USER:    ROLE_USER
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+            entity: { class: FMKeystoneIntegrationBundle:User, property: username }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        api_tokens:
+            pattern:   ^/api/tokens
+            stateless: true
+            keystone-user: ~
+
+        api:
+            pattern:   ^/api/
+            provider:  main
+            anonymous: ~
+            keystone-token: ~
+            stateless: true
+
+    access_control:

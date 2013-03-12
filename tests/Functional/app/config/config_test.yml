@@ -1,0 +1,43 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    secret:          %secret%
+    router:          { resource: "%kernel.root_dir%/config/routing_test.yml" }
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] }
+    profiler:        { only_exceptions: false }
+    test:            ~
+    session:
+        storage_id:     session.storage.filesystem
+
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_sqlite
+        host:     ~
+        port:     ~
+        dbname:   ~
+        user:     ~
+        password: ~
+        logging:  %kernel.debug%
+        path:     "/tmp/data.sqlite"
+        charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        metadata_cache_driver: array
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+
+fm_keystone:
+    user_class: FM\KeystoneIntegrationBundle\Entity\User
+    token_class: FM\KeystoneIntegrationBundle\Entity\Token
