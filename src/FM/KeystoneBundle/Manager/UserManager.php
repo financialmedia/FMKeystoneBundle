@@ -59,10 +59,14 @@ class UserManager implements UserProviderInterface
      *
      * @return UserInterface
      */
-    public function createUser()
+    public function createUser($username, $password, $roles = array())
     {
         $class = $this->getClass();
         $user = new $class;
+        $user->setUsername($username);
+        $user->setPlainPassword($password);
+        $user->setRoles($roles);
+        $user->setEnabled(true);
 
         return $user;
     }

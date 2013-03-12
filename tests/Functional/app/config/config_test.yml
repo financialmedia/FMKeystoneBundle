@@ -29,7 +29,7 @@ doctrine:
         user:     ~
         password: ~
         logging:  %kernel.debug%
-        memory:   true
+        path:     "/tmp/data.sqlite"
         charset:  UTF8
 
     orm:

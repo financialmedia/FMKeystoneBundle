@@ -27,6 +27,13 @@ class Token implements TokenInterface
     protected $expiresAt;
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * Get id
      *
      * @return mixed
