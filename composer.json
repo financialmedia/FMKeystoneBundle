@@ -18,7 +18,13 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*"
     },
+    "require-dev": {
+        "symfony/monolog-bundle": "2.1.*",
+        "doctrine/orm": "*",
+        "doctrine/doctrine-bundle": "*",
+        "sensio/framework-extra-bundle": "*"
+    },
     "autoload": {
-        "psr-0": { "FM": "src/" }
+        "psr-0": { "FM": ["src/", "tests/Functional/src"] }
     }
 }
