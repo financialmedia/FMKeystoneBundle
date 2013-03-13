@@ -30,7 +30,7 @@ class Factory implements EventSubscriberInterface
      * @param CacheInterface           $cache
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(CacheInterface $cache, \Psr\Log\LoggerInterface $logger = null)
+    public function __construct(CacheInterface $cache, \Monolog\Logger $logger = null)
     {
         $this->cache  = $cache;
         $this->logger = $logger;
