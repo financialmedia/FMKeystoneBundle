@@ -52,13 +52,6 @@ class Factory implements EventSubscriberInterface
         $client->setKeystoneCredentials($username, $password);
         $client->getEventDispatcher()->addSubscriber($this);
 
-        // set token
-        if (null === $token = $this->getToken($client)) {
-            throw new \RuntimeException(sprintf('Could not obtain token for %s', $tokenUrl));
-        }
-
-        $client->setToken($token);
-
         return $client;
     }
 
