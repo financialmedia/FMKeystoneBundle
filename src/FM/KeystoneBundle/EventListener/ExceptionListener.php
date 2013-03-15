@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @author Jeroen Fiege <jeroen@financial-media.nl>
- * @copyright Financial Media BV <http://financial-media.nl>
- */
-
-namespace FM\KeystoneBundle\Event\Listener;
+namespace FM\KeystoneBundle\EventListener;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExceptionListener
 {
@@ -18,7 +14,11 @@ class ExceptionListener
         $exception = $event->getException();
 
         if ($exception instanceof AuthenticationException) {
-            $event->setException(new AccessDeniedHttpException($exception->getMessage(), $exception));
+            $event->setResponse(new Response($exception->getMessage(), 403));
+        }
+
+        if ($exception instanceof AccessDeniedHttpException) {
+            $event->setResponse(new Response($exception->getMessage(), 401));
         }
     }
 }

@@ -55,7 +55,7 @@ class TokenHeaderAuthenticationListener implements ListenerInterface
                 $this->logger->info(sprintf('Authentication request failed for user "%s" using X-Auth-Token header: %s', $authToken, $failed->getMessage()));
             }
 
-            throw new AccessDeniedHttpException('Unauthorized', $failed);
+            throw $failed;
         }
     }
 }

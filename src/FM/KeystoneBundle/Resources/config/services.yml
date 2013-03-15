@@ -12,6 +12,6 @@ services:
     arguments: [@fm_keystone.security.encoder.token, @doctrine.orm.entity_manager, %fm_keystone.model.token.class%]
 
   fm_keystone.kernel.listener.exception:
-    class: FM\KeystoneBundle\Event\Listener\ExceptionListener
+    class: FM\KeystoneBundle\EventListener\ExceptionListener
     tags:
-      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }

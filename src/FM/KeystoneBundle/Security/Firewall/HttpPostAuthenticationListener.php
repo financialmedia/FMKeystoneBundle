@@ -91,7 +91,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
                 $this->logger->info(sprintf('Authentication request failed for user "%s" using POST and passwordCredentials: %s', $username, $failed->getMessage()));
             }
 
-            throw new AccessDeniedHttpException('Unauthorized', $failed);
+            throw $failed;
         }
     }
 
