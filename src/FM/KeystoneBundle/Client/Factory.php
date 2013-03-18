@@ -61,41 +61,35 @@ class Factory implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            'client.initialize' => array('onInitialize'),
             'request.error' => array('onRequestError')
         );
     }
 
+    public function onInitialize(Event $event)
+    {
+        $this->resetToken($event['client']);
+    }
+
     /**
-     * Listener for request errors.
-     *
-     * Catches 404 errors, since it's a bit harsh to throw an exception for
-     * that. Also handles requests with expired authentication, by
-     * reauthenticating and sending the request again.
+     * Listener for request errors. Handles requests with expired
+     * authentication, by reauthenticating and sending the request again.
      */
     public function onRequestError(Event $event)
     {
-        // make sure no exceptions are thrown on 404 response codes
-        if ($event['response']->getStatusCode() === 404) {
-            $event->stopPropagation();
-        }
-
         // if token validity expired, re-request with a new token.
-        // TODO: our own keystone implementation returns 500 responses when not
-        // authenticating properly, this has to be updated, after which this
-        // handler needs to be updated.
-        if (in_array($event['response']->getStatusCode(), array(401, 500))) {
+        if (in_array($event['response']->getStatusCode(), array(401, 403))) {
             if ($this->logger) {
                 $this->logger->addDebug('Token expired, fetching a new one');
             }
 
             // set new token in client
             $client = $event['request']->getClient();
-            $token = $this->getToken($client, true);
-            $client->setToken($token);
+            $this->resetToken($client);
 
             // clone request and update token header
             $newRequest = clone $event['request'];
-            $newRequest->setHeader('X-Auth-Token', $token->getId());
+            $newRequest->setHeader('X-Auth-Token', $client->getToken()->getId());
             $newResponse = $newRequest->send();
 
             // Set the response object of the request without firing more events
@@ -104,6 +98,12 @@ class Factory implements EventSubscriberInterface
             // Stop other events from firing when you override 401 responses
             $event->stopPropagation();
         }
+    }
+
+    protected function resetToken(Client $client)
+    {
+        $token = $this->getToken($client, true);
+        $client->setToken($token);
     }
 
     /**

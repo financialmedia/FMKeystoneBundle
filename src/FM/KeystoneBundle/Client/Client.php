@@ -101,4 +101,18 @@ class Client extends GuzzleClient
     {
         return $this->publicUrl;
     }
+
+    public function getBaseUrl($expand = true)
+    {
+        if (!$this->publicUrl) {
+            $this->dispatch(
+                'client.initialize',
+                array(
+                    'client' => $this
+                )
+            );
+        }
+
+        return parent::getBaseUrl($expand);
+    }
 }
