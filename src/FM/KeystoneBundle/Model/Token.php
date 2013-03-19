@@ -1,19 +1,12 @@
 <?php
 
-/**
- * @author Jeroen Fiege <jeroen@financial-media.nl>
- * @copyright Financial Media BV <http://financial-media.nl>
- */
-
 namespace FM\KeystoneBundle\Model;
 
-use FM\KeystoneBundle\Model\TokenInterface;
-
-/**
- * @see ../Resources/config/doctrine/Token.orm.xml for mapping information
- */
-class Token implements TokenInterface
+class Token
 {
+    /**
+     * @var string
+     */
     protected $id;
 
     /**
@@ -27,16 +20,9 @@ class Token implements TokenInterface
     protected $expiresAt;
 
     /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Get id
      *
-     * @return mixed
+     * @return string
      */
     public function getId()
     {
@@ -87,14 +73,5 @@ class Token implements TokenInterface
     public function getExpiresAt()
     {
         return $this->expiresAt;
-    }
-
-    public function isExpired()
-    {
-        if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
-            return true;
-        }
-
-        return false;
     }
 }

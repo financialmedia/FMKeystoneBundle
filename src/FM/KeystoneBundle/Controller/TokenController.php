@@ -2,7 +2,7 @@
 
 namespace FM\KeystoneBundle\Controller;
 
-use FM\KeystoneBundle\Model\TokenInterface;
+use FM\KeystoneBundle\Model\Token;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +30,8 @@ class TokenController extends Controller
         $data = array(
             'access' => array(
                 'token' => $this->getTokenData($token),
-                'serviceCatalog' => $this->getServiceCatalogs($token),
-                'user' => $this->getUserData($user)
+                'user' => $this->getUserData($user),
+                'serviceCatalog' => $this->getServiceCatalog($token)
             )
         );
 
@@ -51,33 +51,38 @@ class TokenController extends Controller
         return $this->get('fm_keystone.token_manager');
     }
 
-    protected function getTokenData(TokenInterface $token)
+    protected function getTokenData(Token $token)
     {
         return array(
-            'expires' => gmdate('Y-m-d\TH:i:s\Z', $token->getExpiresAt()->getTimestamp()),
-            'id' => $token->getId()
+            'id' => $token->getId(),
+            'expires' => $token->getExpiresAt()->format(\DateTime::ISO8601)
         );
     }
 
-    protected function getServiceCatalogs(TokenInterface $token)
+    protected function getServiceCatalog(Token $token)
     {
-        return array(
-            array(
-                'endpoints' => $this->getEndpoints($token),
-                'type' => 'object-store',
-                'name' => 'norris'
-            )
-        );
-    }
+        $q = $this->get('doctrine')->getManager()->createQuery('SELECT s, e FROM FMKeystoneBundle:Service s JOIN s.endpoints e');
+        $q->useResultCache(true, null, 3600);
+        $services = $q->getResult();
 
-    protected function getEndpoints(TokenInterface $token)
-    {
-        return array(
-            array(
-                'adminURL' => $this->getContainer()->getParameter('admin_url'),
-                'publicURL' => $this->getContainer()->getParameter('public_url'),
-            )
-        );
+        $catalog = array();
+        foreach ($services as $service) {
+            $endpoints = array();
+            foreach ($service->getEndpoints() as $endpoint) {
+                $endpoints[] = array(
+                    'adminUrl' => $endpoint->getAdminUrl(),
+                    'publicUrl' => $endpoint->getPublicUrl()
+                );
+            }
+
+            $catalog[] = array(
+                'name' => $service->getName(),
+                'type' => $service->getType(),
+                'endpoints' => $endpoints,
+            );
+        }
+
+        return $catalog;
     }
 
     protected function getUserData(UserInterface $user)

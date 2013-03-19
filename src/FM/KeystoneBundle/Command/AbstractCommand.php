@@ -22,4 +22,9 @@ abstract class AbstractCommand extends ContainerAwareCommand
     {
         return $this->getUserProvider()->loadUserByUsername($username);
     }
+
+    protected function getServiceManager()
+    {
+        return $this->getContainer()->get('fm_keystone.service_manager');
+    }
 }

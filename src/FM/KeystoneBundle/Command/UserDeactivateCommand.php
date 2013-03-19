@@ -17,9 +17,9 @@ class UserDeactivateCommand extends AbstractCommand
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),
             ))
             ->setHelp(<<<EOT
-The <info>cdn:user:deactivate</info> command deactivates a user (will not be able to log in)
+The <info>%command.name%</info> command deactivates a user (will not be able to log in)
 
-  <info>php app/console cdn:user:deactivate peter</info>
+  <info>php app/console %command.name% peter</info>
 EOT
             );
     }

@@ -18,15 +18,15 @@ class UserChangePasswordCommand extends AbstractCommand
                 new InputArgument('password', InputArgument::REQUIRED, 'The password'),
             ))
             ->setHelp(<<<EOT
-The <info>cdn:user:change-password</info> command changes the password of a user:
+The <info>%command.name%</info> command changes the password of a user:
 
-  <info>php app/console cdn:user:change-password peter</info>
+  <info>php app/console %command.name% peter</info>
 
 This interactive shell will first ask you for a password.
 
 You can alternatively specify the password as a second argument:
 
-  <info>php app/console cdn:user:change-password peter mypassword</info>
+  <info>php app/console %command.name% peter mypassword</info>
 
 EOT
             );

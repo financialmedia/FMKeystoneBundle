@@ -9,7 +9,11 @@ services:
 
   fm_keystone.token_manager:
     class: FM\KeystoneBundle\Manager\TokenManager
-    arguments: [@fm_keystone.security.encoder.token, @doctrine.orm.entity_manager, %fm_keystone.model.token.class%]
+    arguments: [@fm_keystone.security.encoder.token, @doctrine.orm.entity_manager]
+
+  fm_keystone.service_manager:
+    class: FM\KeystoneBundle\Manager\ServiceManager
+    arguments: [@doctrine.orm.entity_manager]
 
   fm_keystone.kernel.listener.exception:
     class: FM\KeystoneBundle\EventListener\ExceptionListener

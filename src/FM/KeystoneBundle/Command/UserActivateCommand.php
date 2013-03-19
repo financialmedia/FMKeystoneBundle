@@ -17,9 +17,9 @@ class UserActivateCommand extends AbstractCommand
                 new InputArgument('username', InputArgument::REQUIRED, 'The username'),
             ))
             ->setHelp(<<<EOT
-The <info>cdn:user:activate</info> command activates a user (so they will be able to log in):
+The <info>%command.name%</info> command activates a user (so they will be able to log in):
 
-  <info>php app/console cdn:user:activate peter</info>
+  <info>php app/console %command.name% peter</info>
 EOT
             );
     }

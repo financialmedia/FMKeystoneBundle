@@ -26,42 +26,8 @@ class FMKeystoneExtension extends Extension
         $loader->load('services.yml');
         $loader->load('security.yml');
 
-        $this->remapParametersNamespaces($config, $container, array(
-            '' => array(
-                'user_class'       => 'fm_keystone.model.user.class',
-                'token_class'      => 'fm_keystone.model.token.class',
-                'user_provider_id' => 'fm_keystone.security.user_provider.id',
-            ),
-        ));
-    }
-
-    protected function remapParameters(array $config, ContainerBuilder $container, array $map)
-    {
-        foreach ($map as $name => $paramName) {
-            if (array_key_exists($name, $config)) {
-                $container->setParameter($paramName, $config[$name]);
-            }
-        }
-    }
-
-    protected function remapParametersNamespaces(array $config, ContainerBuilder $container, array $namespaces)
-    {
-        foreach ($namespaces as $ns => $map) {
-            if ($ns) {
-                if (!array_key_exists($ns, $config)) {
-                    continue;
-                }
-                $namespaceConfig = $config[$ns];
-            } else {
-                $namespaceConfig = $config;
-            }
-            if (is_array($map)) {
-                $this->remapParameters($namespaceConfig, $container, $map);
-            } else {
-                foreach ($namespaceConfig as $name => $value) {
-                    $container->setParameter(sprintf($map, $name), $value);
-                }
-            }
-        }
+        $container->setParameter('fm_keystone.model.user.class', $config['user_class']);
+        $container->setParameter('fm_keystone.security.user_provider.id', $config['user_provider_id']);
+        $container->setParameter('fm_keystone.service_types', $config['service_types']);
     }
 }

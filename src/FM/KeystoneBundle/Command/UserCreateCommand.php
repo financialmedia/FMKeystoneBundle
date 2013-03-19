@@ -21,19 +21,19 @@ class UserCreateCommand extends AbstractCommand
                 new InputOption('inactive', null, InputOption::VALUE_NONE, 'Set the user as inactive'),
             ))
             ->setHelp(<<<EOT
-The <info>cdn:user:create</info> command creates a user:
+The <info>%command.name%</info> command creates a user:
 
-  <info>php app/console cdn:user:create peter</info>
+  <info>php app/console %command.name% peter</info>
 
 This interactive shell will ask you for an email and then a password.
 
 You can alternatively specify the email and password as the second and third arguments:
 
-  <info>php app/console cdn:user:create peter peter@example.com mypassword</info>
+  <info>php app/console %command.name% peter peter@example.com mypassword</info>
 
 You can create an inactive user (will not be able to log in):
 
-  <info>php app/console cdn:user:create peter --inactive</info>
+  <info>php app/console %command.name% peter --inactive</info>
 
 EOT
             );

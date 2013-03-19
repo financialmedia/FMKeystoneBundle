@@ -1,15 +1,9 @@
 <?php
 
-/**
- * @author Jeroen Fiege <jeroen@financial-media.nl>
- * @copyright Financial Media BV <http://financial-media.nl>
- */
-
 namespace FM\KeystoneBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-
-use FM\KeystoneBundle\Model\Token;
+use FM\KeystoneBundle\Entity\Token;
 use FM\KeystoneBundle\Security\Encoder\TokenEncoder;
 
 class TokenManager
@@ -17,32 +11,22 @@ class TokenManager
     protected $encoder;
     protected $entityManager;
     protected $repository;
-    protected $tokenClass;
 
     /**
      * Constructor.
      *
      * @param TokenEncoder  $encoder
      * @param EntityManager $entityManager
-     * @param string        $tokenClass
      */
-    public function __construct(TokenEncoder $encoder, EntityManager $entityManager, $tokenClass)
+    public function __construct(TokenEncoder $encoder, EntityManager $entityManager)
     {
         $this->encoder = $encoder;
         $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository($tokenClass);
-
-        $metadata = $this->entityManager->getClassMetadata($tokenClass);
-        $this->tokenClass = $metadata->getName();
-    }
-
-    protected function getClass()
-    {
-        return $this->tokenClass;
+        $this->repository = $this->entityManager->getRepository('FMKeystoneBundle:Token');
     }
 
     /**
-     * Returns an token instance
+     * Returns a token instance
      *
      * @return UserInterface
      */
@@ -50,8 +34,7 @@ class TokenManager
     {
         $expires = time() + (int) $ttl;
 
-        $class = $this->getClass();
-        $token = new $class;
+        $token = new Token;
         $token->setHash($this->getEncoder()->generateTokenValue(get_class($user), $user->getUsername(), $user->getPassword(), $expires));
         $token->setExpiresAt(new \DateTime('@' . $expires));
 
@@ -60,7 +43,7 @@ class TokenManager
         return $token;
     }
 
-    protected function findTokenBy($criteria)
+    public function findTokenBy($criteria)
     {
         return $this->repository->findOneBy($criteria);
     }
@@ -98,13 +81,5 @@ class TokenManager
     public function getEncoder()
     {
         return $this->encoder;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsClass($class)
-    {
-        return $class === $this->getClass();
     }
 }
