@@ -1,5 +1,2 @@
 parameters:
   secret: NotSoSecret
-
-  admin_url:            http://localhost/api
-  public_url:           http://localhost/api

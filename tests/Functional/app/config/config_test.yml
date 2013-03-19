@@ -40,4 +40,4 @@ doctrine:
 
 fm_keystone:
     user_class: FM\KeystoneIntegrationBundle\Entity\User
-    token_class: FM\KeystoneIntegrationBundle\Entity\Token
+    service_types: ~

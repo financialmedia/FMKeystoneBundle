@@ -1,5 +1,5 @@
 {
-    "hash": "e6e7a33c1c4d96db213896fd0e29443f",
+    "hash": "38449f877eb888089c032465f27ab7d0",
     "packages": [
         {
             "name": "doctrine/common",
@@ -35,7 +35,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },

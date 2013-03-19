@@ -1,28 +1,35 @@
 <?php
 
-/**
- * @author Jeroen Fiege <jeroen@financial-media.nl>
- * @copyright Financial Media BV <http://financial-media.nl>
- */
-
 namespace FM\KeystoneBundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
+    protected static $serviceType = 'compute';
+    protected static $serviceName = 'foo';
+    protected static $publicUrl = 'http://example.org/';
+    protected static $adminUrl = 'http://secured.example.org/';
+
     protected $userProvider;
     protected $user;
+    protected $serviceManager;
+    protected $service;
 
     public function setUp()
     {
         $this->client = $this->createClient();
+        $this->getService();
     }
 
     public function tearDown()
     {
         if (null !== $this->user) {
             $this->getUserProvider()->deleteUser($this->user);
+        }
+
+        if (null !== $this->service) {
+            $this->getServiceManager()->removeService($this->service);
         }
     }
 
@@ -33,6 +40,35 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $this->userProvider;
+    }
+
+    protected function getServiceManager()
+    {
+        if (null === $this->serviceManager) {
+            $this->serviceManager = static::$kernel->getContainer()->get('fm_keystone.service_manager');
+        }
+
+        return $this->serviceManager;
+    }
+
+    protected function getUser()
+    {
+        if ($this->user === null) {
+            $this->user = $this->getUserProvider()->createUser(uniqid('test'), '1234', array('ROLE_API_USER'));
+            $this->getUserProvider()->updateUser($this->user);
+        }
+
+        return $this->user;
+    }
+
+    protected function getService()
+    {
+        if ($this->service === null) {
+            $this->service = $this->getServiceManager()->createService(static::$serviceType, static::$serviceName);
+            $this->getServiceManager()->addEndpoint($this->service, static::$publicUrl, static::$adminUrl);
+        }
+
+        return $this->service;
     }
 
     public function getRoute($name, array $parameters = array())
@@ -48,14 +84,12 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     protected function requestToken($assoc = false)
     {
-        $this->user = $this->getUserProvider()->createUser(uniqid('test'), '1234', array('ROLE_API_USER'));
-
-        $this->getUserProvider()->updateUser($this->user);
+        $user = $this->getUser();
 
         $data = array(
             'auth' => array(
                 'passwordCredentials' => array(
-                    'username' => $this->user->getUsername(),
+                    'username' => $user->getUsername(),
                     'password' => '1234',
                 )
             )
