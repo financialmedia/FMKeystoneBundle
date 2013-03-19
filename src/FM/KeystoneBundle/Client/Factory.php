@@ -79,17 +79,28 @@ class Factory implements EventSubscriberInterface
     {
         // if token validity expired, re-request with a new token.
         if (in_array($event['response']->getStatusCode(), array(401, 403))) {
+            $request = $event['request'];
+
+            // see if we have retries left
+            $retries = $request->hasHeader('X-Auth-Retries') ? (int) $request->getHeader('X-Auth-Retries') : 1;
+            if ($retries < 1) {
+                $this->logger->addError('Keystone request failed, no more retries left');
+
+                return;
+            }
+
             if ($this->logger) {
                 $this->logger->addDebug('Token expired, fetching a new one');
             }
 
             // set new token in client
-            $client = $event['request']->getClient();
+            $client = $request->getClient();
             $this->resetToken($client);
 
             // clone request and update token header
-            $newRequest = clone $event['request'];
+            $newRequest = clone $request;
             $newRequest->setHeader('X-Auth-Token', $client->getToken()->getId());
+            $newRequest->setHeader('X-Auth-Retries', --$retries);
             $newResponse = $newRequest->send();
 
             // Set the response object of the request without firing more events
