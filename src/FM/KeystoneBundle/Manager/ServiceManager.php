@@ -25,7 +25,7 @@ class ServiceManager
     /**
      * Returns service with given criteria
      *
-     * @param  array $criteria
+     * @param  array          $criteria
      * @return array<Service>
      */
     public function findServiceBy(array $criteria)

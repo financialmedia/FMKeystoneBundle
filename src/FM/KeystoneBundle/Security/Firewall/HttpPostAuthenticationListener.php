@@ -4,7 +4,6 @@ namespace FM\KeystoneBundle\Security\Firewall;
 
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;

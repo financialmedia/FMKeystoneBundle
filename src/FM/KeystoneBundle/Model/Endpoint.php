@@ -37,7 +37,7 @@ class Endpoint
     /**
      * Set publicUrl
      *
-     * @param string $publicUrl
+     * @param  string   $publicUrl
      * @return Endpoint
      */
     public function setPublicUrl($publicUrl)
@@ -60,7 +60,7 @@ class Endpoint
     /**
      * Set adminUrl
      *
-     * @param string $adminUrl
+     * @param  string   $adminUrl
      * @return Endpoint
      */
     public function setAdminUrl($adminUrl)
@@ -83,7 +83,7 @@ class Endpoint
     /**
      * Set service
      *
-     * @param \FM\KeystoneBundle\Entity\Service $service
+     * @param  \FM\KeystoneBundle\Entity\Service $service
      * @return Endpoint
      */
     public function setService(\FM\KeystoneBundle\Entity\Service $service = null)

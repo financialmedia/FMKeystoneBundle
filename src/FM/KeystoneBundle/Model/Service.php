@@ -45,7 +45,7 @@ class Service
     /**
      * Set type
      *
-     * @param string $type
+     * @param  string  $type
      * @return Service
      */
     public function setType($type)
@@ -68,7 +68,7 @@ class Service
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string  $name
      * @return Service
      */
     public function setName($name)
@@ -91,7 +91,7 @@ class Service
     /**
      * Add endpoints
      *
-     * @param \FM\KeystoneBundle\Entity\Endpoint $endpoints
+     * @param  \FM\KeystoneBundle\Entity\Endpoint $endpoints
      * @return Service
      */
     public function addEndpoint(\FM\KeystoneBundle\Entity\Endpoint $endpoints)
