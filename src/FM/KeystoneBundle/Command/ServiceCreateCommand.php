@@ -58,13 +58,20 @@ EOT
     {
         if (!$input->getArgument('type')) {
             $types = $this->getContainer()->getParameter('fm_keystone.service_types');
-            $key = $this->getHelper('dialog')->select(
+            $type = $this->getHelper('dialog')->askAndValidate(
                 $output,
                 '<question>Service type:</question> ',
-                $types,
-                0
+                function($type) use ($types) {
+                    if (!in_array($type, $types)) {
+                        throw new \InvalidArgumentException(
+                            sprintf('"%s" is not a valid service type, must be one of %s', $type, implode(', ', $types))
+                        );
+                    }
+
+                    return $type;
+                }
             );
-            $input->setArgument('type', $types[$key]);
+            $input->setArgument('type', $type);
         }
 
         if (!$input->getArgument('name')) {
