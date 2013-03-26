@@ -37,19 +37,25 @@ class Factory implements EventSubscriberInterface
     }
 
     /**
-     * Creates a Guzzle client for communicating with a Keystone service.
+     * Creates a Guzzle client for communicating with a Keystone service. The
+     * service type/name is used to select the right service from the token's
+     * service catalog. If no name is given, the first service of the specified
+     * type is used.
      *
-     * @param  string           $tokenUrl
-     * @param  string           $username
-     * @param  string           $password
+     * @param  string           $tokenUrl    The url where to obtain a token
+     * @param  string           $username    Username
+     * @param  string           $password    Password
+     * @param  string           $serviceType The type of service
+     * @param  string           $serviceName Service name (optional)
      * @return Client
-     * @throws RuntimeException When token could not be obtained
      */
-    public function createClient($tokenUrl, $username, $password)
+    public function createClient($tokenUrl, $username, $password, $serviceType, $serviceName = null)
     {
         $client = new Client();
         $client->setTokenUrl($tokenUrl);
         $client->setKeystoneCredentials($username, $password);
+        $client->setServiceType($serviceType);
+        $client->setServiceName($serviceName);
         $client->getEventDispatcher()->addSubscriber($this);
 
         return $client;

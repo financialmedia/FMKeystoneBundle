@@ -30,6 +30,8 @@ class Client extends GuzzleClient
     protected $tokenUrl;
     protected $publicUrl;
     protected $tenantName;
+    protected $serviceType;
+    protected $serviceName;
     protected $keystoneUsername;
     protected $keystonePassword;
 
@@ -59,6 +61,26 @@ class Client extends GuzzleClient
         return $this->tenantName;
     }
 
+    public function setServiceType($type)
+    {
+        $this->serviceType = $type;
+    }
+
+    public function getServiceType()
+    {
+        return $this->serviceType;
+    }
+
+    public function setServiceName($name)
+    {
+        $this->serviceName = $name;
+    }
+
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
+
     public function setTokenUrl($tokenUrl)
     {
         $this->tokenUrl = $tokenUrl;
@@ -77,7 +99,7 @@ class Client extends GuzzleClient
         $this->getDefaultHeaders()->set('X-Auth-Token', $token->getId());
 
         // set public url
-        $catalog = array_change_key_case($token->getServiceCatalog('object-store'), CASE_LOWER);
+        $catalog = array_change_key_case($token->getServiceCatalog($this->serviceType, $this->serviceName), CASE_LOWER);
         $this->setPublicUrl(rtrim($catalog['publicurl'], '/'));
     }
 
