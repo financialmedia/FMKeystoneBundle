@@ -1,6 +1,12 @@
 services:
     fm_keystone.security.user_provider:
-        alias: fm_keystone.user_manager
+        class: FM\KeystoneBundle\Security\User\UserProvider
+        arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
+        public: false
+
+    fm_keystone.security.user_provider.username.email:
+        class: FM\KeystoneBundle\Security\User\EmailUserProvider
+        arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
         public: false
 
     fm_keystone.security.authentication.listener.httppost:
