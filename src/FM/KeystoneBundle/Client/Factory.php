@@ -144,11 +144,11 @@ class Factory implements EventSubscriberInterface
         $tokenName = sprintf('keystone_token_%s', rawurlencode($client->getTokenUrl()));
 
         // see if token is in cache
-        if ($this->cache->has($tokenName)) {
-            $token = unserialize($this->cache->get($tokenName));
+        if (!$forceNew && $cachedToken = $this->cache->get($tokenName)) {
+            $token = unserialize($cachedToken);
         }
 
-        if (!isset($token) || !($token instanceof Token) || $this->tokenIsExpired($token) || $forceNew) {
+        if (!isset($token) || !($token instanceof Token) || $this->tokenIsExpired($token)) {
             $token = $this->createToken($client);
             $this->cache->set($tokenName, serialize($token), $token->getExpirationDate()->getTimestamp() - time());
         }
