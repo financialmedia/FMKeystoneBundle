@@ -88,7 +88,7 @@ class Factory implements EventSubscriberInterface
             $request = $event['request'];
 
             // see if we have retries left
-            $retries = $request->hasHeader('X-Auth-Retries') ? (int) $request->getHeader('X-Auth-Retries') : 1;
+            $retries = $request->hasHeader('X-Auth-Retries') ? (int) $request->getHeader('X-Auth-Retries', true) : 1;
             if ($retries < 1) {
                 $this->logger->addError('Keystone request failed, no more retries left');
 
