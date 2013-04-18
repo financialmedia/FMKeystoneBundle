@@ -82,7 +82,9 @@ class Factory implements EventSubscriberInterface
 
     public function onInitialize(Event $event)
     {
-        $this->resetToken($event['client']);
+        $client = $event['client'];
+        $token = $this->getToken($client);
+        $client->setToken($token);
     }
 
     /**
