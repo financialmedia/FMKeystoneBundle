@@ -2,6 +2,8 @@
 
 namespace FM\KeystoneBundle\Client;
 
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Plugin\Cache\DefaultCacheKeyProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Guzzle\Common\Event;
 
@@ -51,7 +53,13 @@ class Factory implements EventSubscriberInterface
      */
     public function createClient($tokenUrl, $username, $password, $serviceType, $serviceName = null)
     {
-        $client = new Client();
+        $options = array(
+            Client::REQUEST_PARAMS => array(
+                DefaultCacheKeyProvider::CACHE_KEY_FILTER => 'header=X-Auth-Token,X-Auth-Retries'
+            )
+        );
+
+        $client = new Client('', $options);
         $client->setTokenUrl($tokenUrl);
         $client->setKeystoneCredentials($username, $password);
         $client->setServiceType($serviceType);
