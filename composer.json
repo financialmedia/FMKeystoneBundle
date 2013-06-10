@@ -16,9 +16,9 @@
     ],
     "require": {
         "php": ">=5.3.3",
-		"symfony/symfony": ">=2.1",
-		"guzzle/guzzle": ">=3.0,<3.4",
-		"monolog/monolog": ">=1.2"
+		"symfony/symfony": "~2.1",
+		"guzzle/guzzle": "~3.0",
+		"monolog/monolog": "~1.2"
     },
     "require-dev": {
         "symfony/monolog-bundle": "*",
