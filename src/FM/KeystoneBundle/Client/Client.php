@@ -96,7 +96,7 @@ class Client extends GuzzleClient
         $this->token = $token;
 
         // set new default header
-        $this->getDefaultHeaders()->set('X-Auth-Token', $token->getId());
+        $this->setDefaultOption('headers/X-Auth-Token', $token->getId());
 
         // set public url
         $catalog = array_change_key_case($token->getServiceCatalog($this->serviceType, $this->serviceName), CASE_LOWER);
