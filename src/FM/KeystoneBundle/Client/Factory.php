@@ -90,10 +90,16 @@ class Factory implements EventSubscriberInterface
     {
         // if token validity expired, re-request with a new token.
         if (in_array($event['response']->getStatusCode(), array(401, 403))) {
+            /** @var \Guzzle\Http\Message\Request $request */
             $request = $event['request'];
 
             // see if we have retries left
-            $retries = $request->hasHeader('X-Auth-Retries') ? (int) $request->getHeader('X-Auth-Retries', true) : 1;
+            if ($request->hasHeader('X-Auth-Retries')) {
+                $headerValues = $request->getHeader('X-Auth-Retries')->toArray();
+                $retriesValue = array_shift($headerValues);
+            }
+
+            $retries = $request->hasHeader('X-Auth-Retries') ? $retriesValue : 1;
             if ($retries < 1) {
                 $this->logger->addError('Keystone request failed, no more retries left');
 
