@@ -58,20 +58,13 @@ EOT
     {
         if (!$input->getArgument('type')) {
             $types = $this->getContainer()->getParameter('fm_keystone.service_types');
-            $type = $this->getHelper('dialog')->askAndValidate(
+            $type = $this->getHelper('dialog')->select(
                 $output,
                 '<question>Service type:</question> ',
-                function($type) use ($types) {
-                    if (!in_array($type, $types)) {
-                        throw new \InvalidArgumentException(
-                            sprintf('"%s" is not a valid service type, must be one of %s', $type, implode(', ', $types))
-                        );
-                    }
-
-                    return $type;
-                }
+                $types,
+                key($types)
             );
-            $input->setArgument('type', $type);
+            $input->setArgument('type', $types[$type]);
         }
 
         if (!$input->getArgument('name')) {
@@ -84,7 +77,7 @@ EOT
                 $output,
                 '<question>Public url:</question> ',
                 function($url) {
-                    if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
+                    if (!filter_var($url, FILTER_VALIDATE_URL)) {
                         throw new \Exception(
                             sprintf('Invalid url: "%s"', $url)
                         );

@@ -47,7 +47,7 @@ class UserGrantCommand extends AbstractCommand
         if (!$input->getArgument('username')) {
             $username = $this->getHelper('dialog')->askAndValidate(
                 $output,
-                'Please choose a username:',
+                '<question>Please choose a username:</question> ',
                 function($username) {
                     if (empty($username)) {
                         throw new \Exception('Username can not be empty');
@@ -57,6 +57,16 @@ class UserGrantCommand extends AbstractCommand
                 }
             );
             $input->setArgument('username', $username);
+        }
+
+        if (!$input->getArgument('role')) {
+            $roles = $this->getValidRoles();
+            $role = $this->getHelper('dialog')->select(
+                $output,
+                '<question>Role:</question> ',
+                $roles
+            );
+            $input->setArgument('role', $roles[$role]);
         }
     }
 

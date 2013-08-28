@@ -65,7 +65,7 @@ EOT
         }
 
         if (!$input->getArgument('password')) {
-            $password = $this->getHelper('dialog')->askAndValidate(
+            $password = $this->getHelper('dialog')->askHiddenResponseAndValidate(
                 $output,
                 'Please enter the new password:',
                 function($password) {
