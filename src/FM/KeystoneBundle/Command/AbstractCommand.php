@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @author Jeroen Fiege <jeroen@financial-media.nl>
- * @copyright Financial Media BV <http://financial-media.nl>
- */
-
 namespace FM\KeystoneBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
