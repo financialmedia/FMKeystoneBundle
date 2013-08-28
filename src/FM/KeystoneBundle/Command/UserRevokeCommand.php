@@ -30,7 +30,7 @@ class UserRevokeCommand extends AbstractCommand
         $user->removeRole($role);
         $this->getUserProvider()->updateUser($user);
 
-        $output->writeln(sprintf('User <info>%s</info> has been revoked role <info></info>', $username, $role));
+        $output->writeln(sprintf('User <info>%s</info> has been revoked role <info>%s</info>', $username, $role));
     }
 
     /**
