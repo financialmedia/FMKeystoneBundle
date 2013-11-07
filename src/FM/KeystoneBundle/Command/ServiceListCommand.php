@@ -32,16 +32,15 @@ EOT
         foreach ($services as $service) {
             $output->writeln(
                 sprintf(
-                    'Service id: <info>%s</info>, name: <info>%s</info>, type: <info>%s</info>',
-                    $service->getId(),
+                    'Service name: <info>%s</info>, type: <info>%s</info>',
                     $service->getName(),
                     $service->getType()
                 )
             );
             $output->writeln($divider);
 
-            foreach ($service->getEndpoints() as $endpoint) {
-                $output->writeln(sprintf('Endpoint <comment>%d</comment>:', $endpoint->getId()));
+            foreach ($service->getEndpoints() as $key => $endpoint) {
+                $output->writeln(sprintf('Endpoint <comment>%d</comment>:', $key));
                 $output->writeln(sprintf('Public url: <comment>%s</comment>', $endpoint->getPublicUrl()));
                 $output->writeln(sprintf('Admin url:  <comment>%s</comment>', $endpoint->getAdminUrl()));
                 $output->writeln('');

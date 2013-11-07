@@ -2,119 +2,74 @@
 
 namespace FM\KeystoneBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
-use FM\KeystoneBundle\Entity\Service;
-use FM\KeystoneBundle\Entity\Endpoint;
+use Symfony\Component\HttpFoundation\Request;
+use FM\KeystoneBundle\Model\Service;
+use FM\KeystoneBundle\Model\Endpoint;
 
 class ServiceManager
 {
-    protected $entityManager;
-    protected $repository;
+    /**
+     * @var string[]
+     */
+    protected $types = array();
 
     /**
-     * Constructor.
-     *
-     * @param EntityManager $entityManager
+     * @var Service[]
      */
-    public function __construct(EntityManager $entityManager)
+    protected $services = array();
+
+    /**
+     * @param array $types
+     */
+    public function setTypes(array $types)
     {
-        $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository('FMKeystoneBundle:Service');
+        $this->types = $types;
     }
 
     /**
-     * Returns service with given criteria
-     *
-     * @param  array          $criteria
-     * @return array<Service>
+     * @return array
      */
-    public function findServiceBy(array $criteria)
+    public function getTypes()
     {
-        return $this->repository->findOneBy($criteria);
+        return $this->types;
     }
 
     /**
-     * Returns service with given id
+     * Add service
      *
-     * @param  integer $id
-     * @return Service
+     * @param Service $service
      */
-    public function findServiceById($id)
+    public function addService(Service $service)
     {
-        return $this->repository->find($id);
+        $this->services[] = $service;
     }
 
     /**
      * Returns all services
      *
-     * @return array<Service>
+     * @return Service[]
      */
-    public function findAll()
+    public function getServices()
     {
-        return $this->repository->findAll();
+        return $this->services;
     }
 
-    /**
-     * Creates a new service
-     *
-     * @return Service
-     * @throws RuntimeException When trying to insert duplicate service
-     */
-    public function createService($type, $name)
+    public function findServiceByEndpoint($url)
     {
-        $service = $this->repository->findOneBy(array('type' => $type, 'name' => $name));
-        if ($service !== null) {
-            throw new \RuntimeException(
-                sprintf('Service of type "%s" named "%s" already exists', $type, $name)
-            );
-        }
+        $url = $this->getNormalizedUrl($url);
 
-        $service = new Service;
-        $service->setType($type);
-        $service->setName($name);
-
-        return $service;
-    }
-
-    public function addEndpoint(Service $service, $publicUrl, $adminUrl)
-    {
-        $endpoint = new Endpoint;
-        $endpoint->setPublicUrl($publicUrl);
-        $endpoint->setAdminUrl($adminUrl);
-
-        $service->addEndpoint($endpoint);
-        $endpoint->setService($service);
-
-        $this->updateService($service);
-
-        return $service;
-    }
-
-    /**
-     * Updates a service.
-     *
-     * @param Service $service
-     * @param Boolean $andFlush Whether to flush the changes (default true)
-     */
-    public function updateService(Service $service, $andFlush = true)
-    {
-        $this->entityManager->persist($service);
-        if ($andFlush) {
-            $this->entityManager->flush();
+        foreach ($this->services as $service) {
+            foreach ($service->getEndpoints() as $endpoint) {
+                $endpointUrl = $this->getNormalizedUrl($endpoint->getPublicUrl());
+                if (substr($url, 0, strlen($endpointUrl)) === $endpointUrl) {
+                    return $service;
+                }
+            }
         }
     }
 
-    /**
-     * Removes a service.
-     *
-     * @param Service $service
-     * @param Boolean $andFlush Whether to flush the changes (default true)
-     */
-    public function removeService(Service $service, $andFlush = true)
+    protected function getNormalizedUrl($url)
     {
-        $this->entityManager->remove($service);
-        if ($andFlush) {
-            $this->entityManager->flush();
-        }
+        return Request::create($url)->getUri();
     }
 }

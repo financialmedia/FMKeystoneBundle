@@ -2,7 +2,7 @@
     "name": "fm/keystone-bundle",
     "type": "symfony-bundle",
     "description": "A Symfony2 implementation of the OpenStack Identity Service API A.K.A. Keystone",
-    "keywords": ["openstack", "identity", "keystone", "authentication", "token", "object-store"],
+    "keywords": ["openstack", "identity", "keystone", "authentication", "token"],
     "license": "MIT",
     "authors": [
         {
@@ -17,14 +17,7 @@
     "require": {
         "php": ">=5.4.0",
 		"symfony/symfony": "~2.2",
-		"guzzle/guzzle": "~3.7",
 		"monolog/monolog": "~1.2"
-    },
-    "require-dev": {
-        "symfony/monolog-bundle": "*",
-        "doctrine/orm": "*",
-        "doctrine/doctrine-bundle": "*",
-        "sensio/framework-extra-bundle": "*"
     },
     "autoload": {
         "psr-0": { "FM": ["src/", "tests/Functional/src"] }

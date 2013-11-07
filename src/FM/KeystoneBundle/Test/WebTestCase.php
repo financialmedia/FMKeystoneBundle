@@ -27,19 +27,16 @@ abstract class WebTestCase extends BaseWebTestCase
         if (null !== $this->user) {
             $this->getUserProvider()->deleteUser($this->user);
         }
-
-        if (null !== $this->service) {
-            $this->getServiceManager()->removeService($this->service);
-        }
     }
 
     protected function getUserProvider()
     {
-        if (null === $this->userProvider) {
-            $this->userProvider = static::$kernel->getContainer()->get('fm_keystone.security.user_provider');
-        }
+        return static::$kernel->getContainer()->get('fm_keystone.security.user_provider');
+    }
 
-        return $this->userProvider;
+    protected function getUserManipulator()
+    {
+        return static::$kernel->getContainer()->get('fm_keystone.user_manipulator');
     }
 
     protected function getServiceManager()
@@ -54,22 +51,32 @@ abstract class WebTestCase extends BaseWebTestCase
     protected function getUser()
     {
         if ($this->user === null) {
-            $this->user = $this->getUserProvider()->createUser(uniqid('test'), '1234', array('ROLE_API_USER'));
-            $this->getUserProvider()->updateUser($this->user);
+            if ($user = $this->getUserProvider()->findUserByEmail('test@example.org')) {
+                $this->getUserProvider()->deleteUser($user);
+            }
+
+            $this->user = $this->getUserManipulator()->create(uniqid('test'), '1234', 'test@example.org', true);
         }
 
         return $this->user;
     }
 
-    protected function getService()
-    {
-        if ($this->service === null) {
-            $this->service = $this->getServiceManager()->createService(static::$serviceType, static::$serviceName);
-            $this->getServiceManager()->addEndpoint($this->service, static::$publicUrl, static::$adminUrl);
-        }
+    // protected function getService()
+    // {
+    //     if ($this->service === null) {
+    //         $manager = $this->getServiceManager();
 
-        return $this->service;
-    }
+    //         // remove existing service first
+    //         if ($service = $manager->findServiceBy(array('type' => static::$serviceType, 'name' => static::$serviceName))) {
+    //             $manager->removeService($service);
+    //         }
+
+    //         $this->service = $manager->createService(static::$serviceType, static::$serviceName);
+    //         $this->getServiceManager()->addEndpoint($this->service, static::$publicUrl, static::$adminUrl);
+    //     }
+
+    //     return $this->service;
+    // }
 
     public function getRoute($name, array $parameters = array())
     {

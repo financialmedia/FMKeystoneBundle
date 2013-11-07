@@ -5,11 +5,6 @@ namespace FM\KeystoneBundle\Model;
 class Service
 {
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
      * @var string
      */
     protected $name;
@@ -20,26 +15,18 @@ class Service
     protected $type;
 
     /**
-     * @var Doctrine\Common\Collections\ArrayCollection
+     * @var Endpoint[]
      */
     protected $endpoints;
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name, $type)
     {
-        $this->endpoints = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
+        $this->name      = $name;
+        $this->type      = $type;
+        $this->endpoints = array();
     }
 
     /**
@@ -89,32 +76,28 @@ class Service
     }
 
     /**
-     * Add endpoints
+     * Add endpoint
      *
-     * @param  \FM\KeystoneBundle\Entity\Endpoint $endpoints
+     * @param  string $publicUrl
+     * @param  string $adminUrl
      * @return Service
      */
-    public function addEndpoint(\FM\KeystoneBundle\Entity\Endpoint $endpoints)
+    public function addEndpoint($publicUrl, $adminUrl)
     {
-        $this->endpoints[] = $endpoints;
+        $endpoint = new Endpoint();
+        $endpoint->setPublicUrl($publicUrl);
+        $endpoint->setAdminUrl($adminUrl);
+        $endpoint->setService($this);
+
+        $this->endpoints[] = $endpoint;
 
         return $this;
     }
 
     /**
-     * Remove endpoints
-     *
-     * @param \FM\KeystoneBundle\Entity\Endpoint $endpoints
-     */
-    public function removeEndpoint(\FM\KeystoneBundle\Entity\Endpoint $endpoints)
-    {
-        $this->endpoints->removeElement($endpoints);
-    }
-
-    /**
      * Get endpoints
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Endpoint[]
      */
     public function getEndpoints()
     {

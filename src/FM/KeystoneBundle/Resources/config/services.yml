@@ -13,7 +13,14 @@ services:
 
   fm_keystone.service_manager:
     class: FM\KeystoneBundle\Manager\ServiceManager
-    arguments: [@doctrine.orm.entity_manager]
+
+  # definition for a Keystone service, used as a template in the extension
+  fm_keystone.service:
+    class: FM\KeystoneBundle\Model\Service
+    abstract: true
+    arguments:
+      - null # name
+      - null # argument
 
   fm_keystone.kernel.listener.exception:
     class: FM\KeystoneBundle\EventListener\ExceptionListener

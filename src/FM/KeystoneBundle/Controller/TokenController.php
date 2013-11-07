@@ -61,9 +61,7 @@ class TokenController extends Controller
 
     protected function getServiceCatalog(Token $token)
     {
-        $q = $this->get('doctrine')->getManager()->createQuery('SELECT s, e FROM FMKeystoneBundle:Service s JOIN s.endpoints e');
-        $q->useResultCache(true, null, 3600);
-        $services = $q->getResult();
+        $services = $this->get('fm_keystone.service_manager')->getServices();
 
         $catalog = array();
         foreach ($services as $service) {
@@ -93,10 +91,5 @@ class TokenController extends Controller
             'name' => (string) $user,
             'roles' => array()
         );
-    }
-
-    protected function getContainer()
-    {
-        return $this->container;
     }
 }

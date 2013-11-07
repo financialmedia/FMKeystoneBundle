@@ -5,11 +5,6 @@ namespace FM\KeystoneBundle\Model;
 class Endpoint
 {
     /**
-     * @var integer
-     */
-    protected $id;
-
-    /**
      * @var string
      */
     protected $adminUrl;
@@ -23,16 +18,6 @@ class Endpoint
      * @var Service
      */
     protected $service;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set publicUrl
@@ -83,10 +68,10 @@ class Endpoint
     /**
      * Set service
      *
-     * @param  \FM\KeystoneBundle\Entity\Service $service
+     * @param  Service $service
      * @return Endpoint
      */
-    public function setService(\FM\KeystoneBundle\Entity\Service $service = null)
+    public function setService(Service $service = null)
     {
         $this->service = $service;
 
@@ -96,7 +81,7 @@ class Endpoint
     /**
      * Get service
      *
-     * @return \FM\KeystoneBundle\Entity\Service
+     * @return Service
      */
     public function getService()
     {

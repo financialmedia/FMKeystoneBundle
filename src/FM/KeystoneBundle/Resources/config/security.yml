@@ -1,52 +1,52 @@
 services:
-    fm_keystone.security.user_provider:
-        class: FM\KeystoneBundle\Security\User\UserProvider
-        arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
+  fm_keystone.security.user_provider:
+    class: FM\KeystoneBundle\Security\User\UserProvider
+    arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
 
-    fm_keystone.security.user_provider.username_email:
-        class: FM\KeystoneBundle\Security\User\EmailUserProvider
-        arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
+  fm_keystone.security.user_provider.username_email:
+    class: FM\KeystoneBundle\Security\User\EmailUserProvider
+    arguments: [@security.encoder_factory, @doctrine.orm.entity_manager, %fm_keystone.model.user.class%]
 
-    fm_keystone.security.authentication.listener.httppost:
-        class: FM\KeystoneBundle\Security\Firewall\HttpPostAuthenticationListener
-        arguments:
-            - @security.context
-            - @security.authentication.manager
-            - null # provider-shared key
-            - @logger
-        tags:
-            - { name: monolog.logger, channel: security }
+  fm_keystone.security.authentication.listener.httppost:
+    class: FM\KeystoneBundle\Security\Firewall\HttpPostAuthenticationListener
+    arguments:
+      - @security.context
+      - @security.authentication.manager
+      - null # provider-shared key
+      - @logger
+    tags:
+      - { name: monolog.logger, channel: security }
 
-    fm_keystone.security.authentication.listener.tokenheader:
-        class: FM\KeystoneBundle\Security\Firewall\TokenHeaderAuthenticationListener
-        arguments:
-            - @security.context
-            - @security.authentication.manager
-            - null # provider-shared key
-            - @logger
-        tags: [{ name: monolog.logger channel: security }]
+  fm_keystone.security.authentication.listener.tokenheader:
+    class: FM\KeystoneBundle\Security\Firewall\TokenHeaderAuthenticationListener
+    arguments:
+      - @security.context
+      - @security.authentication.manager
+      - null # provider-shared key
+      - @logger
+    tags: [{ name: monolog.logger channel: security }]
 
-    fm_keystone.security.authentication.provider.user:
-        class: FM\KeystoneBundle\Security\Authentication\Provider\UserAuthenticationProvider
-        arguments:
-            - @fm_keystone.security.user_provider
-            - @security.user_checker
-            - null # provider-shared key
-            - @security.encoder_factory
+  fm_keystone.security.authentication.provider.user:
+    class: FM\KeystoneBundle\Security\Authentication\Provider\UserAuthenticationProvider
+    arguments:
+      - @fm_keystone.security.user_provider
+      - @security.user_checker
+      - null # provider-shared key
+      - @security.encoder_factory
 
-    fm_keystone.security.authentication.provider.token:
-        class: FM\KeystoneBundle\Security\Authentication\Provider\TokenAuthenticationProvider
-        arguments:
-            - @fm_keystone.token_manager
-            - @fm_keystone.security.user_provider
-            - @security.user_checker
-            - null # provider-shared key
+  fm_keystone.security.authentication.provider.token:
+    class: FM\KeystoneBundle\Security\Authentication\Provider\TokenAuthenticationProvider
+    arguments:
+      - @fm_keystone.token_manager
+      - @fm_keystone.security.user_provider
+      - @security.user_checker
+      - null # provider-shared key
 
-    fm_keystone.security.authentication.provider.combined:
-        class: FM\KeystoneBundle\Security\Authentication\Provider\CombinedAuthenticationProvider
-        arguments:
-            - @service_container
+  fm_keystone.security.authentication.provider.combined:
+    class: FM\KeystoneBundle\Security\Authentication\Provider\CombinedAuthenticationProvider
+    arguments:
+      - @service_container
 
-    fm_keystone.security.encoder.token:
-        class: FM\KeystoneBundle\Security\Encoder\TokenEncoder
-        arguments: [null] # secret (injected via compiler pass)
+  fm_keystone.security.encoder.token:
+    class: FM\KeystoneBundle\Security\Encoder\TokenEncoder
+    arguments: [null] # secret (injected via compiler pass)
