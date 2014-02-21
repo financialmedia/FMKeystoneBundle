@@ -2,8 +2,8 @@
 
 namespace FM\KeystoneBundle\Manager;
 
-use Symfony\Component\HttpFoundation\Request;
 use FM\KeystoneBundle\Model\Service;
+use Symfony\Component\HttpFoundation\Request;
 
 class ServiceManager
 {

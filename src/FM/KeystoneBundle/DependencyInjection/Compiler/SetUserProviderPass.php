@@ -2,8 +2,8 @@
 
 namespace FM\KeystoneBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Sets the configurable UserProvider for the authentication providers.

@@ -2,19 +2,18 @@
 
 namespace FM\KeystoneBundle\Security\Authentication\Provider;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
 use FM\KeystoneBundle\Entity\Token;
 use FM\KeystoneBundle\Manager\TokenManager;
 use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class TokenAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -31,10 +30,17 @@ class TokenAuthenticationProvider implements AuthenticationProviderInterface
      * @param UserProviderInterface $userProvider               An UserProvider
      * @param UserCheckerInterface  $userChecker                An UserCheckerInterface interface
      * @param string                $providerKey                A provider key
-     * @param Boolean               $hideUserNotFoundExceptions Whether to hide user not found exception or not
+     * @param boolean               $hideUserNotFoundExceptions Whether to hide user not found exception or not
+     *
+     * @throws \InvalidArgumentException
      */
-    public function __construct(TokenManager $tokenProvider, UserProviderInterface $userProvider, UserCheckerInterface $userChecker, $providerKey, $hideUserNotFoundExceptions = true)
-    {
+    public function __construct(
+        TokenManager $tokenProvider,
+        UserProviderInterface $userProvider,
+        UserCheckerInterface $userChecker,
+        $providerKey,
+        $hideUserNotFoundExceptions = true
+    ) {
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
         }
@@ -55,6 +61,7 @@ class TokenAuthenticationProvider implements AuthenticationProviderInterface
             return null;
         }
 
+        /** @var TokenToken $token */
         $authToken = $token->getToken();
         if (empty($authToken)) {
             $authToken = 'NONE_PROVIDED';
@@ -121,7 +128,8 @@ class TokenAuthenticationProvider implements AuthenticationProviderInterface
 
             $username = base64_decode($username, true);
 
-            if (false === $this->tokenProvider->getEncoder()->compareHashes($hash, $this->tokenProvider->getEncoder()->generateHash($class, $username, $user->getPassword(), $expires))) {
+            $hash2 = $this->tokenProvider->getEncoder()->generateHash($class, $username, $user->getPassword(), $expires);
+            if (false === $this->tokenProvider->getEncoder()->compareHashes($hash, $hash2)) {
                 throw new BadCredentialsException('The presented token is invalid.');
             }
         }
