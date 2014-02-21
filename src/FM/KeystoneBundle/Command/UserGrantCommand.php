@@ -48,7 +48,7 @@ class UserGrantCommand extends AbstractCommand
             $username = $this->getHelper('dialog')->askAndValidate(
                 $output,
                 '<question>Please choose a username:</question> ',
-                function($username) {
+                function ($username) {
                     if (empty($username)) {
                         throw new \Exception('Username can not be empty');
                     }

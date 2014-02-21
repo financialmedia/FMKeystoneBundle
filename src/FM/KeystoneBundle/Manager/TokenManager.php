@@ -3,13 +3,26 @@
 namespace FM\KeystoneBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use FM\KeystoneBundle\Entity\Token;
 use FM\KeystoneBundle\Security\Encoder\TokenEncoder;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TokenManager
 {
+    /**
+     * @var TokenEncoder
+     */
     protected $encoder;
+
+    /**
+     * @var EntityManager
+     */
     protected $entityManager;
+
+    /**
+     * @var EntityRepository
+     */
     protected $repository;
 
     /**
@@ -28,14 +41,24 @@ class TokenManager
     /**
      * Returns a token instance
      *
-     * @return UserInterface
+     * @param UserInterface $user
+     * @param integer       $ttl
+     *
+     * @return Token
      */
     public function createToken($user, $ttl = 3600)
     {
         $expires = time() + (int) $ttl;
 
+        $hash = $this->getEncoder()->generateTokenValue(
+            get_class($user),
+            $user->getUsername(),
+            $user->getPassword(),
+            $expires
+        );
+
         $token = new Token;
-        $token->setHash($this->getEncoder()->generateTokenValue(get_class($user), $user->getUsername(), $user->getPassword(), $expires));
+        $token->setHash($hash);
         $token->setExpiresAt(new \DateTime('@' . $expires));
 
         $this->updateToken($token);
@@ -43,6 +66,11 @@ class TokenManager
         return $token;
     }
 
+    /**
+     * @param $criteria
+     *
+     * @return Token|null
+     */
     public function findTokenBy($criteria)
     {
         return $this->repository->findOneBy($criteria);
@@ -51,8 +79,8 @@ class TokenManager
     /**
      * Finds a token by token
      *
-     * @param  string $token
-     * @return Token
+     * @param  string     $token
+     * @return Token|null
      */
     public function findTokenByToken($token)
     {
@@ -73,11 +101,19 @@ class TokenManager
         }
     }
 
+    /**
+     * @param Token $token
+     *
+     * @return boolean
+     */
     public function validate(Token $token)
     {
         return new \DateTime() < $token->getExpiresAt();
     }
 
+    /**
+     * @return TokenEncoder
+     */
     public function getEncoder()
     {
         return $this->encoder;

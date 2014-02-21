@@ -3,7 +3,6 @@
 namespace FM\KeystoneBundle\Security\Firewall;
 
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
-
 use FM\KeystoneBundle\Security\Authentication\Token\TokenToken;
 
 class HttpPostAuthenticationListener implements ListenerInterface
@@ -47,16 +45,12 @@ class HttpPostAuthenticationListener implements ListenerInterface
 
         if ($request->getMethod() !== 'POST') {
             throw new MethodNotAllowedHttpException(array('POST'));
-
-            return;
         }
 
         $data = json_decode($request->getContent(), true);
 
         if (false === $this->validateJson($data)) {
             throw new AuthenticationServiceException('Invalid JSON!');
-
-            return;
         }
 
         if (isset($data['auth']['passwordCredentials'])) {

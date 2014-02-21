@@ -78,8 +78,8 @@ class Service
     /**
      * Add endpoint
      *
-     * @param  string $publicUrl
-     * @param  string $adminUrl
+     * @param  string  $publicUrl
+     * @param  string  $adminUrl
      * @return Service
      */
     public function addEndpoint($publicUrl, $adminUrl)

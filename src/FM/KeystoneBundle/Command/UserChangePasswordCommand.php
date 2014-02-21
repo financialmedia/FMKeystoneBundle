@@ -53,7 +53,7 @@ EOT
             $username = $this->getHelper('dialog')->askAndValidate(
                 $output,
                 'Please give the username:',
-                function($username) {
+                function ($username) {
                     if (empty($username)) {
                         throw new \Exception('Username can not be empty');
                     }
@@ -68,7 +68,7 @@ EOT
             $password = $this->getHelper('dialog')->askHiddenResponseAndValidate(
                 $output,
                 'Please enter the new password:',
-                function($password) {
+                function ($password) {
                     if (empty($password)) {
                         throw new \Exception('Password can not be empty');
                     }
