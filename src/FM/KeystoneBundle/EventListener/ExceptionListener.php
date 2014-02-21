@@ -2,10 +2,10 @@
 
 namespace FM\KeystoneBundle\EventListener;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ExceptionListener
 {

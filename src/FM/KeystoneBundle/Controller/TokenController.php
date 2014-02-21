@@ -3,7 +3,6 @@
 namespace FM\KeystoneBundle\Controller;
 
 use FM\KeystoneBundle\Model\Token;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;

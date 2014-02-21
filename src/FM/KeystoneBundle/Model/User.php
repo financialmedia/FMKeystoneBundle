@@ -2,9 +2,9 @@
 
 namespace FM\KeystoneBundle\Model;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -115,9 +115,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get username
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getUsername()
     {
@@ -161,9 +159,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get password
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getPassword()
     {
@@ -207,9 +203,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get salt
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getSalt()
     {
@@ -245,6 +239,8 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * Remove role
      *
      * @param string $role
+     *
+     * @return $this
      */
     public function removeRole($role)
     {
@@ -274,9 +270,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get roles
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getRoles()
     {
@@ -297,9 +291,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * Get enabled
-     *
-     * @return boolean
+     * @inheritdoc
      */
     public function isEnabled()
     {
@@ -343,7 +335,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * @return boolean
+     * @inheritdoc
      */
     public function isAccountNonExpired()
     {
@@ -378,7 +370,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     }
 
     /**
-     * @return boolean
+     * @inheritdoc
      */
     public function isCredentialsNonExpired()
     {
@@ -389,6 +381,9 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isAccountNonLocked()
     {
         return !$this->locked;
@@ -404,11 +399,17 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         return !$this->isAccountNonExpired();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function eraseCredentials()
     {
         $this->plainPassword = null;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isEqualTo(UserInterface $user)
     {
         if (!$user instanceof User) {
@@ -446,6 +447,9 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function serialize()
     {
         return serialize(array(
@@ -460,6 +464,9 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         ));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function unserialize($data)
     {
         list(
