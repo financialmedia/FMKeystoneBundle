@@ -2,7 +2,10 @@
 
 namespace FM\KeystoneBundle\Test;
 
+use FM\KeystoneBundle\Util\UserManipulator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\StringInput;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -16,10 +19,16 @@ abstract class WebTestCase extends BaseWebTestCase
     protected $serviceManager;
     protected $service;
 
+    protected static $application;
+
     public function setUp()
     {
         $this->client = $this->createClient();
-        $this->getService();
+
+        static::$application = new Application(static::$kernel);
+        static::$application->setAutoExit(false);
+        static::$application->run(new StringInput('doctrine:database:create'));
+        static::$application->run(new StringInput('doctrine:schema:update --force'));
     }
 
     public function tearDown()
@@ -34,6 +43,9 @@ abstract class WebTestCase extends BaseWebTestCase
         return static::$kernel->getContainer()->get('fm_keystone.security.user_provider');
     }
 
+    /**
+     * @return UserManipulator
+     */
     protected function getUserManipulator()
     {
         return static::$kernel->getContainer()->get('fm_keystone.user_manipulator');
@@ -55,28 +67,15 @@ abstract class WebTestCase extends BaseWebTestCase
                 $this->getUserProvider()->deleteUser($user);
             }
 
-            $this->user = $this->getUserManipulator()->create(uniqid('test'), '1234', 'test@example.org', true);
+            $userManipulator = $this->getUserManipulator();
+
+            $this->user = $userManipulator->create($username = uniqid('test'), '1234', 'test@example.org', true);
+
+            $userManipulator->addRole($username, 'ROLE_USER');
         }
 
         return $this->user;
     }
-
-    // protected function getService()
-    // {
-    //     if ($this->service === null) {
-    //         $manager = $this->getServiceManager();
-
-    //         // remove existing service first
-    //         if ($service = $manager->findServiceBy(array('type' => static::$serviceType, 'name' => static::$serviceName))) {
-    //             $manager->removeService($service);
-    //         }
-
-    //         $this->service = $manager->createService(static::$serviceType, static::$serviceName);
-    //         $this->getServiceManager()->addEndpoint($this->service, static::$publicUrl, static::$adminUrl);
-    //     }
-
-    //     return $this->service;
-    // }
 
     public function getRoute($name, array $parameters = array())
     {

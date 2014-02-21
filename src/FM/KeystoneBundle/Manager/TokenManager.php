@@ -75,7 +75,7 @@ class TokenManager
 
     public function validate(Token $token)
     {
-        return (bool) (new \DateTime() < $token->getExpiresAt());
+        return new \DateTime() < $token->getExpiresAt();
     }
 
     public function getEncoder()
