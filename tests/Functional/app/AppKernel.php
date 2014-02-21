@@ -11,19 +11,19 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return array(
-                new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-                new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-                new Symfony\Bundle\TwigBundle\TwigBundle(),
-                new Symfony\Bundle\MonologBundle\MonologBundle(),
-                new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-                new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-                new FM\KeystoneBundle\FMKeystoneBundle(),
-                new FM\KeystoneIntegrationBundle\FMKeystoneIntegrationBundle()
+            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new \Symfony\Bundle\TwigBundle\TwigBundle(),
+            new \Symfony\Bundle\MonologBundle\MonologBundle(),
+            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new \FM\KeystoneBundle\FMKeystoneBundle(),
+            new \FM\KeystoneIntegrationBundle\FMKeystoneIntegrationBundle()
         );
     }
 
     /**
-     * @return null
+     * @inheritdoc
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {

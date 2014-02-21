@@ -2,42 +2,83 @@
 
 namespace FM\KeystoneBundle\Test;
 
+use FM\KeystoneBundle\Manager\ServiceManager;
+use FM\KeystoneBundle\Model\User;
+use FM\KeystoneBundle\Security\User\UserProvider;
 use FM\KeystoneBundle\Util\UserManipulator;
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\DomCrawler\Crawler;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
+    /**
+     * @var string
+     */
     protected static $serviceType = 'compute';
+
+    /**
+     * @var string
+     */
     protected static $serviceName = 'foo';
+
+    /**
+     * @var string
+     */
     protected static $publicUrl = 'http://example.org/';
+
+    /**
+     * @var string
+     */
     protected static $adminUrl = 'http://secured.example.org/';
 
-    protected $userProvider;
+    /**
+     * @var User
+     */
     protected $user;
-    protected $serviceManager;
-    protected $service;
 
+    /**
+     * @var Application
+     */
     protected static $application;
 
-    public function setUp()
+    /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
         $this->client = $this->createClient();
 
         static::$application = new Application(static::$kernel);
         static::$application->setAutoExit(false);
-        static::$application->run(new StringInput('doctrine:database:create'));
-        static::$application->run(new StringInput('doctrine:schema:update --force'));
+        static::$application->run(new StringInput('doctrine:database:create'), new NullOutput());
+        static::$application->run(new StringInput('doctrine:schema:update --force'), new NullOutput());
     }
 
-    public function tearDown()
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
     {
+        $this->client = null;
+
         if (null !== $this->user) {
             $this->getUserProvider()->deleteUser($this->user);
+            $this->user = null;
         }
     }
 
+    /**
+     * @return UserProvider
+     */
     protected function getUserProvider()
     {
         return static::$kernel->getContainer()->get('fm_keystone.security.user_provider');
@@ -51,15 +92,17 @@ abstract class WebTestCase extends BaseWebTestCase
         return static::$kernel->getContainer()->get('fm_keystone.user_manipulator');
     }
 
+    /**
+     * @return ServiceManager
+     */
     protected function getServiceManager()
     {
-        if (null === $this->serviceManager) {
-            $this->serviceManager = static::$kernel->getContainer()->get('fm_keystone.service_manager');
-        }
-
-        return $this->serviceManager;
+        return static::$kernel->getContainer()->get('fm_keystone.service_manager');
     }
 
+    /**
+     * @return User
+     */
     protected function getUser()
     {
         if ($this->user === null) {
@@ -77,6 +120,12 @@ abstract class WebTestCase extends BaseWebTestCase
         return $this->user;
     }
 
+    /**
+     * @param string $name
+     * @param array  $parameters
+     *
+     * @return string
+     */
     public function getRoute($name, array $parameters = array())
     {
         return static::$kernel->getContainer()->get('router')->generate($name, $parameters);
@@ -85,10 +134,11 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * Creates a new user and requests a valid token.
      *
-     * @param  string $assoc When TRUE, returned objects will be converted into associative arrays.
-     * @return mixed
+     * @throws \UnexpectedValueException
+     *
+     * @return array
      */
-    protected function requestToken($assoc = false)
+    protected function requestToken()
     {
         $user = $this->getUser();
 
@@ -103,15 +153,44 @@ abstract class WebTestCase extends BaseWebTestCase
 
         $this->client->request('POST', $this->getRoute('get_token'), array(), array(), array(), json_encode($data));
 
-        $result = json_decode($this->client->getResponse()->getContent(), $assoc);
+        $result = json_decode($this->client->getResponse()->getContent(), true);
 
-        return $result;
+        if (is_array($result)) {
+            return $result;
+        }
+
+        throw new \UnexpectedValueException(
+            sprintf(
+                'Unexpected response (%d): %s',
+                $this->client->getResponse()->getStatusCode(),
+                $this->client->getResponse()->getContent()
+            )
+        );
     }
 
-    protected function requestWithValidToken($method, $uri, array $parameters = array(), array $files = array(), array $server = array(), $content = null, $changeHistory = true)
-    {
-        $server = array_merge($server,
-            array('HTTP_X-Auth-Token' => $this->requestToken()->access->token->id)
+    /**
+     * @param string  $method
+     * @param string  $uri
+     * @param array   $parameters
+     * @param array   $files
+     * @param array   $server
+     * @param string  $content
+     * @param boolean $changeHistory
+     *
+     * @return Crawler
+     */
+    protected function requestWithValidToken(
+        $method,
+        $uri,
+        array $parameters = array(),
+        array $files = array(),
+        array $server = array(),
+        $content = null,
+        $changeHistory = true
+    ) {
+        $server = array_merge(
+            $server,
+            array('HTTP_X-Auth-Token' => $this->requestToken()['access']['token']['id'])
         );
 
         return $this->client->request($method, $uri, $parameters, $files, $server, $content, $changeHistory);

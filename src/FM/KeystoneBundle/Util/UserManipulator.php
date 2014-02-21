@@ -3,6 +3,7 @@
 namespace FM\KeystoneBundle\Util;
 
 use FM\KeystoneBundle\Manager\UserManager;
+use FM\KeystoneBundle\Model\User;
 
 class UserManipulator
 {
@@ -13,6 +14,9 @@ class UserManipulator
      */
     private $userManager;
 
+    /**
+     * @param UserManager $userManager
+     */
     public function __construct(UserManager $userManager)
     {
         $this->userManager = $userManager;
@@ -26,7 +30,7 @@ class UserManipulator
      * @param string  $email
      * @param boolean $active
      *
-     * @return FM\KeystoneBundle\Model\User
+     * @return User
      */
     public function create($username, $password, $email, $active)
     {
@@ -43,6 +47,8 @@ class UserManipulator
      * Activates the given user.
      *
      * @param string $username
+     *
+     * @throws \InvalidArgumentException If the user does not exist
      */
     public function activate($username)
     {
@@ -58,6 +64,8 @@ class UserManipulator
      * Deactivates the given user.
      *
      * @param string $username
+     *
+     * @throws \InvalidArgumentException If the user does not exist
      */
     public function deactivate($username)
     {
@@ -74,6 +82,8 @@ class UserManipulator
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \InvalidArgumentException If the user does not exist
      */
     public function changePassword($username, $password)
     {
@@ -91,7 +101,9 @@ class UserManipulator
      * @param string $username
      * @param string $role
      *
-     * @return Boolean true if role was added, false if user already had the role
+     * @throws \InvalidArgumentException If the user does not exist
+     *
+     * @return boolean true if role was added, false if user already had the role
      */
     public function addRole($username, $role)
     {
@@ -115,7 +127,9 @@ class UserManipulator
      * @param string $username
      * @param string $role
      *
-     * @return Boolean true if role was added, false if user already had the role
+     * @throws \InvalidArgumentException If the user does not exist
+     *
+     * @return boolean true if role was added, false if user already had the role
      */
     public function removeRole($username, $role)
     {

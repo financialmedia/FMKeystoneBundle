@@ -42,7 +42,7 @@ class UserRevokeCommand extends AbstractCommand
             $username = $this->getHelper('dialog')->askAndValidate(
                 $output,
                 'Please choose a username:',
-                function($username) {
+                function ($username) {
                     if (empty($username)) {
                         throw new \Exception('Username can not be empty');
                     }

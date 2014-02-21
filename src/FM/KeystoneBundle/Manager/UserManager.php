@@ -3,8 +3,10 @@
 namespace FM\KeystoneBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-
+use Doctrine\ORM\EntityRepository;
+use FM\KeystoneBundle\Model\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,13 +20,24 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 class UserManager implements UserProviderInterface
 {
+    /**
+     * @var EncoderFactoryInterface
+     */
     protected $encoderFactory;
+
+    /**
+     * @var EntityManager
+     */
     protected $entityManager;
 
     /**
-     * @var Doctrine\ORM\EntityRepository
+     * @var EntityRepository
      */
     protected $repository;
+
+    /**
+     * @var string
+     */
     protected $userClass;
 
     /**
@@ -57,11 +70,17 @@ class UserManager implements UserProviderInterface
     /**
      * Returns an empty user instance
      *
-     * @return UserInterface
+     * @param string        $username
+     * @param string        $password
+     * @param array<string> $roles
+     *
+     * @return User
      */
     public function createUser($username, $password, $roles = array())
     {
         $class = $this->getClass();
+
+        /** @var User $user */
         $user = new $class;
         $user->setUsername($username);
         $user->setPlainPassword($password);
@@ -71,6 +90,11 @@ class UserManager implements UserProviderInterface
         return $user;
     }
 
+    /**
+     * @param $criteria
+     *
+     * @return User|null
+     */
     protected function findUserBy($criteria)
     {
         return $this->repository->findOneBy($criteria);
@@ -81,7 +105,7 @@ class UserManager implements UserProviderInterface
      *
      * @param string $email
      *
-     * @return UserInterface
+     * @return User
      */
     public function findUserByEmail($email)
     {
@@ -93,7 +117,7 @@ class UserManager implements UserProviderInterface
      *
      * @param string $username
      *
-     * @return UserInterface
+     * @return User
      */
     public function findUserByUsername($username)
     {
@@ -105,7 +129,7 @@ class UserManager implements UserProviderInterface
      *
      * @param string $usernameOrEmail
      *
-     * @return UserInterface
+     * @return User
      */
     public function findUserByUsernameOrEmail($usernameOrEmail)
     {
@@ -117,26 +141,30 @@ class UserManager implements UserProviderInterface
     }
 
     /**
-     * Refreshed a user by User Instance
+     * Refreshes a user by User Instance
      *
-     * Throws UnsupportedUserException if a User Instance is given which is not
-     * managed by this UserManager (so another Manager could try managing it)
-     *
-     * It is strongly discouraged to use this method manually as it bypasses
-     * all ACL checks.
+     * It is strongly discouraged to use this method manually as it bypasses all ACL checks.
      *
      * @param UserInterface $user
      *
-     * @return UserInterface
+     * @throws UsernameNotFoundException When User has been removed and could not be reloaded
+     * @throws UnsupportedUserException  When a User Instance is given which is not managed by this UserManager (so
+     *                                   another Manager could try managing it)
+     *
+     * @return User
      */
     public function refreshUser(UserInterface $user)
     {
         $class = $this->getClass();
+
         if (!$user instanceof $class) {
             throw new UnsupportedUserException('Account is not supported.');
         }
+
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+            throw new UnsupportedUserException(
+                sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user))
+            );
         }
 
         $refreshedUser = $this->findUserBy(array('id' => $user->getId()));
@@ -150,12 +178,13 @@ class UserManager implements UserProviderInterface
     /**
      * Loads a user by username
      *
-     * It is strongly discouraged to call this method manually as it bypasses
-     * all ACL checks.
+     * It is strongly discouraged to call this method manually as it bypasses all ACL checks.
      *
      * @param string $username
      *
-     * @return UserInterface
+     * @throws UsernameNotFoundException When no user with the name is found
+     *
+     * @return User
      */
     public function loadUserByUsername($username)
     {
@@ -169,9 +198,9 @@ class UserManager implements UserProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param User $user
      */
-    public function updatePassword(UserInterface $user)
+    public function updatePassword(User $user)
     {
         if (0 !== strlen($password = $user->getPlainPassword())) {
             $user->setPassword($this->encodePassword($password, $user));
@@ -179,12 +208,21 @@ class UserManager implements UserProviderInterface
         }
     }
 
+    /**
+     * @return string
+     */
     public function generateSalt()
     {
         return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
-    public function encodePassword($password, UserInterface $user)
+    /**
+     * @param string $password
+     * @param User   $user
+     *
+     * @return string
+     */
+    public function encodePassword($password, User $user)
     {
         if ($user->getSalt() == '') {
             $user->setSalt($this->generateSalt());
@@ -196,10 +234,10 @@ class UserManager implements UserProviderInterface
     /**
      * Updates a user.
      *
-     * @param UserInterface $user
-     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     * @param User    $user
+     * @param boolean $andFlush Whether to flush the changes (default true)
      */
-    public function updateUser(UserInterface $user, $andFlush = true)
+    public function updateUser(User $user, $andFlush = true)
     {
         $this->updatePassword($user);
 
@@ -212,10 +250,10 @@ class UserManager implements UserProviderInterface
     /**
      * Deletes a user.
      *
-     * @param UserInterface $user
-     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     * @param User    $user
+     * @param boolean $andFlush Whether to flush the changes (default true)
      */
-    public function deleteUser(UserInterface $user, $andFlush = true)
+    public function deleteUser(User $user, $andFlush = true)
     {
         $this->entityManager->remove($user);
         if ($andFlush) {
@@ -223,7 +261,12 @@ class UserManager implements UserProviderInterface
         }
     }
 
-    protected function getEncoder(UserInterface $user)
+    /**
+     * @param User $user
+     *
+     * @return PasswordEncoderInterface
+     */
+    protected function getEncoder(User $user)
     {
         return $this->encoderFactory->getEncoder($user);
     }

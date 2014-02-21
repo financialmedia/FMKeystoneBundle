@@ -38,7 +38,7 @@ class TokenHeaderAuthenticationListener implements ListenerInterface
             return;
         }
 
-        $authToken = (string)$request->headers->get('X-Auth-Token');
+        $authToken = (string) $request->headers->get('X-Auth-Token');
 
         if (null !== $this->logger) {
             $this->logger->info(sprintf('Post Authentication header found using token for token "%s"', $authToken));

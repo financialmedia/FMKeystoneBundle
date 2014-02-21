@@ -68,7 +68,7 @@ class Endpoint
     /**
      * Set service
      *
-     * @param  Service $service
+     * @param  Service  $service
      * @return Endpoint
      */
     public function setService(Service $service = null)
