@@ -37,7 +37,12 @@ doctrine:
         auto_mapping: true
         metadata_cache_driver: array
         naming_strategy: doctrine.orm.naming_strategy.underscore
+        mappings:
+            FMKeystoneIntegrationBundle:
+                dir: %kernel.root_dir%/../src/FM/KeystoneIntegrationBundle/Resources/config/doctrine/
+                type: xml
+                prefix: FM\KeystoneIntegrationBundle\Entity
+                is_bundle: false
 
 fm_keystone:
     user_class: FM\KeystoneIntegrationBundle\Entity\User
-    service_types: ~

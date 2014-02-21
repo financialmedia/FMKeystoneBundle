@@ -14,14 +14,18 @@
     bootstrap                   = "tests/bootstrap.php">
 
     <testsuites>
-        <testsuite name="Test Suite">
-            <directory>tests</directory>
-        </testsuite>
+      <testsuite name="Test Suite">
+        <directory>tests</directory>
+      </testsuite>
     </testsuites>
 
     <php>
-         <server name="KERNEL_DIR" value="./tests/Functional/app" />
+      <server name="KERNEL_DIR" value="./tests/Functional/app"/>
     </php>
+
+    <logging>
+      <log type="coverage-html" target="/tmp/report" charset="UTF-8"/>
+    </logging>
 
     <filter>
       <whitelist>

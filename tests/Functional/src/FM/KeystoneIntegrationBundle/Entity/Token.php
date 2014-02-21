@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="keystone_integration_user")
+ * @ORM\Table(name="keystone_integration_token")
  */
-class User extends \FM\KeystoneBundle\Model\User
+class Token extends \FM\KeystoneBundle\Model\Token
 {
     /**
      * @ORM\Id

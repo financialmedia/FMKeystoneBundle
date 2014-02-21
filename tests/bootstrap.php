@@ -1,11 +1,10 @@
 <?php
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
-if (!file_exists($file = __DIR__.'/../vendor/autoload.php')) {
-    throw new \RuntimeException('Install the dependencies to run the test suite.');
+$file = __DIR__.'/../vendor/autoload.php';
+if (!file_exists($file)) {
+    throw new RuntimeException('Install dependencies to run test suite.');
 }
 
-$loader = require $file;
-
-AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+$loader = require_once $file;
+$loader->add('FM\KeystoneBundle\Tests', __DIR__);
+$loader->add('FM\KeystoneIntegrationBundle', __DIR__ . '/Functional/src');

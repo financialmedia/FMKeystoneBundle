@@ -43,12 +43,12 @@ class TokenControllerTest extends WebTestCase
     {
         $result = $this->requestToken();
 
-        $this->assertInternalType('object', $result);
+        $this->assertInternalType('array', $result);
 
-        $this->assertObjectHasAttribute('access', $result);
-        $this->assertObjectHasAttribute('token', $result->access);
-        $this->assertObjectHasAttribute('id', $result->access->token);
+        $this->assertArrayHasKey('access', $result);
+        $this->assertArrayHasKey('token', $result['access']);
+        $this->assertArrayHasKey('id', $result['access']['token']);
 
-        return $result->access->token->id;
+        return $result['access']['token']['id'];
     }
 }
