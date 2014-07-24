@@ -1,7 +1,7 @@
 {
     "name": "fm/keystone-bundle",
     "type": "symfony-bundle",
-    "description": "A Symfony2 implementation of the OpenStack Identity Service API A.K.A. Keystone",
+    "description": "This bundle is superseded by https://packagist.org/packages/treehouselabs/keystone-bundle",
     "keywords": ["openstack", "identity", "keystone", "authentication", "token"],
     "license": "MIT",
     "authors": [
@@ -23,6 +23,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7"
+    },
+    "suggest": {
+        "treehouselabs/keystone-bundle": "For the maintained counterpart of this bundle"
     },
     "autoload": {
         "psr-0": { "FM": ["src/"] }
